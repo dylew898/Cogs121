@@ -24,3 +24,5 @@ The target demographic for this project would be for elderly people or for peopl
 ### Storyboard 1
 <img width="625" alt="storyboard1_121" src="https://user-images.githubusercontent.com/46572829/56525856-6d51e600-6500-11e9-8623-175c01bf2a7c.png">
 
+### Storyboard 2
+<img width="608" alt="storyboard2_121" src="https://user-images.githubusercontent.com/46572829/56526142-ca4d9c00-6500-11e9-8636-a40586c87d95.png">
