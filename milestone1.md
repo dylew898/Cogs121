@@ -1,8 +1,11 @@
 # Milestone 1
 
 Team Name: Guo’s Bros
+
 Allen K Chiang
+
 Daniel Lew
+
 Kenny Zhu
 
 Proposal Ideas
