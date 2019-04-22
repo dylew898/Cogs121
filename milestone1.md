@@ -8,7 +8,7 @@ Daniel Lew
 
 Kenny Zhu
 
-Proposal Ideas
+## Proposal Ideas
 
 1. Curated entertainment list for first-time travelers
 The target demographic for this project would be first-time travelers on long distance flights. The application would take in some user data like their interests, age, and flight length. Given this information, the application would recommend the user a list of things to do during the flight, such as movies to watch, music to listen to, or games to download on their mobile application. The user can then choose to download these forms of entertainment from our application (there could be an implementation with app stores like the Apple app store and google play store to download these things). After selecting a few things, the app would tell the user approximately how many hours of entertainment they might get out of the things that they downloaded. An API that could be used would be the iTunes API which allows us to search for music, movies, and apps. People in this group are not part of this demographic because we have all traveled before and we all already have a good idea of what we like to do on flights. 
@@ -18,3 +18,9 @@ The target demographic for this project would be to provide small-business owner
 
 3. Hangout finder for the elderly and retired
 The target demographic for this project would be for elderly people or for people who are retired. With elder and retired people, it can be difficult to find things to do or people to hangout with. The application would essentially be a means for these people to find places where other retired or elderly people tend to frequent the most, whether that be various restaurant locations or exercise areas, to allow them to branch out and engage with other people. We would use a Maps API in order to pinpoint locations where people tend to hang out and visit often, and use that as a way to find potential new places for these targeted people to go to and to help socialize. 
+
+## Storyboards
+
+### Storyboard 1
+<img width="625" alt="storyboard1_121" src="https://user-images.githubusercontent.com/46572829/56525856-6d51e600-6500-11e9-8623-175c01bf2a7c.png">
+
