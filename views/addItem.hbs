@@ -1,27 +1,18 @@
-  <h1>Welcome to PetsApp!</h1>
+  <h1>Add Items</h1>
 
   <button id="resetButton">Reset database</button>
   <hr/>
 
-  Name: <input id="nameBox" type="text" size="20"/>
-  <button id="readButton">Get profile</button>
-  <button id="allUsersButton">Get all usernames</button>
+  Item Name: <input id="nameBox" type="text" size="20" required="required"/>
+  <br>
+  Item Barcode: <input id="barCode" type='text' size = '20'/>
+  <br>
+  Number: <input id="numBox" type='number' size="20" required="required"/>
+  <br>
 
-  <div id="jobDiv"></div>
-  <img id="petImage"></img>
+  Units : <input id="unitBox" type='text' size = "20" required="required"/>
+  <button id='insertButton'>Add Items</button>
 
-  <hr/>
-  Name: <input id="insertNameBox" type="text" size="20"/>
-  Job: <input id="insertJobBox" type="text" size="20"/>
-  Pet: <input id="insertPetBox" type="text" size="20"/>
-  <button id="insertButton">Insert into database</button>
-
-  <hr/>
-  Name: <input id="deleteNameBox" type="text" size="20"/>
-  <button id="deleteButton">Delete from database</button>
-
-  <hr/>
-<div id="status"></div>
 
 <script>
 $(document).ready(() => {
@@ -54,46 +45,45 @@ $(document).ready(() => {
       });
     }
   });
-  $('#readButton').click(() => {
-    const key = 'users/' + $('#nameBox').val();
+  $('#insertButton').click(() => {
+    const name = $('#nameBox').val();
+    const units = $('#unitBox').val();
+
+    if( name == "" || units == "") {
+      console.log('no input')
+      return;
+    }
+    const dbLink = name+"-"+units;
+    const key = 'items/' + dbLink;
     // 'once' reads the value once from the database
     database.ref(key).once('value', (snapshot) => {
       const data = snapshot.val();
       console.log('You received some data!', data);
       if (!data) {
         // clear the display
-        $('#jobDiv').html('');
-        $('#petImage').attr('src', '').attr('width', '0px');
-        $('#status').html('Error: could not find user: ' + key);
+        database.ref('items/' + name+'-'+units).set({
+          number: $('#numBox').val(),
+          unit: $('#unitBox').val()
+        });
         return;
       }
-      if (data.job && data.pet) {
-        $('#jobDiv').html('My job is ' + data.job);
-        $('#petImage').attr('src', data.pet).attr('width', '300px');
+      if (data.number && data.unit) {
+        total = parseInt(data.number) + parseInt($('#numBox').val())
+        database.ref('items/' + name+'-'+units).set({
+          number: total,
+          unit: $('#unitBox').val()
+        });
+        return;
       } else {
         // clear the display
-        $('#jobDiv').html('');
-        $('#petImage').attr('src', '').attr('width', '0px');
+        database.ref('items/' + name+'-'+units).set({
+          number: $('#numBox').val(),
+          unit: $('#unitBox').val()
+        });
+        return;
       }
     });
   });
-  $('#allUsersButton').click(() => {
-    database.ref('users/').once('value', (snapshot) => {
-      const data = snapshot.val();
-      console.log('You received some data!', data);
-      $('#status').html('All users: ' + Object.keys(data));
-    });
-  });
-  $('#insertButton').click(() => {
-    const name = $('#insertNameBox').val();
-    database.ref('users/' + name).set({
-      job: $('#insertJobBox').val(),
-      pet: $('#insertPetBox').val()
-    });
-  });
-  $('#deleteButton').click(() => {
-    const name = $('#deleteNameBox').val();
-    database.ref('users/' + name).remove();
-  });
+
 });
 </script>
