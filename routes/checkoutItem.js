@@ -3,7 +3,9 @@ var router = express.Router();
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.render('checkoutItem');
+  res.render('checkoutItem', {
+    title: "Checkout Item"
+  });
 });
 
 module.exports = router;
