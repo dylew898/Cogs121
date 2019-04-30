@@ -12,11 +12,25 @@
 
   Units : <input id="unitBox" type='text' size = "20" required="required"/>
   <button id='insertButton'>Add Items</button>
-
+  <div id="status"></div>
 
 <script>
 $(document).ready(() => {
   const database = firebase.database();
+
+  database.ref('users/').on('value', (snapshot) => {
+    const allUsers = snapshot.val();
+    console.log('users/ changed:', allUsers);
+    if (allUsers) {
+      $('#status').html(''); // clear the HTML
+      $('#status').append('List of users:');
+      Object.keys(allUsers).forEach((name) => {
+        $('#status').append('<li>' + name + ' ' + allUsers[name].job + ' ' + allUsers[name].pet + '</li>');
+      });
+    }
+  });
+
+
   $('#resetButton').click(() => {
     console.log('Resetting the database');
     /* remember the fake JavaScript object database from PetsApp v1?
@@ -27,6 +41,7 @@ $(document).ready(() => {
     };
     */
     database.ref('users/').remove(); // delete the entire collection
+    database.ref('items/').remove();
     // writes data to the database:
     database.ref('users/Philip').set({job: 'professor', pet: 'cat.jpg'});
     database.ref('users/John').set({job: 'student',   pet: 'dog.jpg'});
@@ -34,14 +49,14 @@ $(document).ready(() => {
   });
   // use .on('value' to get notified in real-time whenever anyone
   // on the internet updates your database. cool!
-  database.ref('users/').on('value', (snapshot) => {
+  database.ref('items/').on('value', (snapshot) => {
     const allUsers = snapshot.val();
     console.log('users/ changed:', allUsers);
     if (allUsers) {
       $('#status').html(''); // clear the HTML
       $('#status').append('List of users:');
       Object.keys(allUsers).forEach((name) => {
-        $('#status').append('<li>' + name + ' ' + allUsers[name].job + ' ' + allUsers[name].pet + '</li>');
+        $('#status').append('<li>' + name + ' ' + allUsers[name].number + ' ' + allUsers[name].unit + '</li>');
       });
     }
   });
