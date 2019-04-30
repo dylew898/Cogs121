@@ -1,6 +1,30 @@
-<h1>{{title}}</h1>
-<p>Welcome to {{title}}</p>
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <a class="navbar-brand" href="http://localhost:3000/">Inventory App</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+        <a class="nav-link" href="http://localhost:3000/viewInventory">View Inventory</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" href="http://localhost:3000/addItem">Add Item</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" href="http://localhost:3000/checkoutItem">Checkout Item</a>
+        </li>
+    </ul>
+    </div>
+    <div class="mt-2 mt-md-0">
+    <a href="http://localhost:3000/login" class="btn btn-outline-success my-2 my-sm-0" type="submit">Sign Out</a>
+    </div>
+</nav>
 
-<a href="http://localhost:3000/viewInventory" class="btn btn-lg btn-primary btn-block">View Inventory</a>
-<a href="http://localhost:3000/addItem" class="btn btn-lg btn-primary btn-block">Add Inventory</a>
-<a href="http://localhost:3000/checkoutItem" class="btn btn-lg btn-primary btn-block">Checkout Inventory</a>
+<main role="main" class="container">
+    <div class="jumbotron">
+    <a href="http://localhost:3000/viewInventory" class="btn btn-lg btn-primary btn-block">View Inventory</a>
+    <a href="http://localhost:3000/addItem" class="btn btn-lg btn-primary btn-block">Add Inventory</a>
+    <a href="http://localhost:3000/checkoutItem" class="btn btn-lg btn-primary btn-block">Checkout Inventory</a>
+    </div>
+</main>
