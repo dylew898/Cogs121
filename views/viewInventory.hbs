@@ -37,7 +37,7 @@ const database = firebase.database();
         $('#status').html(''); // clear the HTML
         $('#status').append('List of items:');
         Object.keys(allItems).forEach((item) => {
-            const newCard = $('<div>', {class:"card mb-3", style:"max-width: 540px;"});
+            const newCard = $('<a href=/inventoryItem?id=' + item + '>', {class:"card mb-3", style:"max-width: 540px;"});
             const cardBlock = $('<div>', {class:"row no-gutters"});
             const cardImageBlock = $('<div>', {class:"col-md-4"});
             const cardImageStyle =  $('<img>', {
