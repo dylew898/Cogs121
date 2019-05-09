@@ -28,26 +28,26 @@
 
 <form>
   <div class="form-group row">
-    <label for="nameBox" class="col">Item Name</label>
-    <div class="col-sm-8">
+    <label for="nameBox" class="col-sm-2">Item Name</label>
+    <div class="col-sm-4">
       <input type="text" class="form-control" id="nameBox" required="required">
     </div>
   </div>
   <div class="form-group row">
-    <label for="barCode" class="col">Item Barcode</label>
-    <div class="col-sm-8">
+    <label for="barCode" class="col-sm-2">Item Barcode</label>
+    <div class="col-sm-4">
       <input type="text" class="form-control" id="barCode" required="required">
     </div>
   </div>
   <div class="form-group row">
-    <label for="numBox" class="col">Item Number</label>
-    <div class="col-sm-8">
+    <label for="numBox" class="col-sm-2">Item Number</label>
+    <div class="col-sm-4">
       <input type="text" class="form-control" id="numBox" required="required">
     </div>
   </div>
   <div class="form-group row">
-    <label for="unitBox" class="col">Units</label>
-    <div class="col-sm-8">
+    <label for="unitBox" class="col-sm-2">Units</label>
+    <div class="col-sm-4">
       <select class="form-control" id="unitBox" required="required">
         <option>Select Unit</option>
         <option>Boxes</option>
@@ -56,8 +56,12 @@
       </select>
     </div>
   </div>
-  <button type="button" class="btn btn-success" id='insertButton'>Add Item</button>
-  <div id="status"></div>
+  <div class="form-group row">
+    <div class="col-sm-12">
+      <button type="button" class="btn btn-success" id='insertButton'>Add Item</button>
+      <div id="status"></div>
+    </div>
+  </div>
 </form>
 
 

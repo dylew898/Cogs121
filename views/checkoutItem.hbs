@@ -26,31 +26,36 @@
 <button id="resetButton">Reset database</button>
 <hr/>
 
-<div class="col-sm-4 row">
-  Item Name:
-  <select class="form-control" id="nameSelect">
-  <option value="">-- Select --</option>
-  </select>
+<div class="form-group row">
+  <label for="nameSelect" class="col-sm-2">Item Name</label>
+  <div class="col-4">
+    <select class="form-control" id="nameSelect">
+    <option value="">-- Select --</option>
+    </select>
+  </div>
 </div>
 
 <br>
 
-<div class="col-sm-4">
-  Unit
-  <select class="form-control"  id="unitSelect">
-  <option value="">-- Select --</option>
-  </select>
+<div class="form-group row">
+  <label for="unitSelect" class="col-sm-2">Unit</label>
+  <div class="col-4">
+    <select class="form-control"  id="unitSelect">
+    <option value="">-- Select --</option>
+    </select>
+  </div>
 </div>
-
 <br>
+<button type="button" class="btn btn-danger" id='checkoutButton'>Checkout Items</button>
+<div id="status"></div>
 
+{{!--
 Item Barcode: <input id="barCodeBox" type='text' size = '20' readonly/>
 <br>
 Current Number: <input id="numBox" type='number' size="20" required="required" readonly/>
 <br>
-Checkout Number : <input id="checkNumBox" type='number' size="20" required="required" />
-<button id='checkoutButton'>Checkout Items</button>
-<div id="status"></div>
+Checkout Number : <input id="checkNumBox" type='number' size="20" required="required" /> --}}
+
 
 <script>
 $(document).ready(() => {
