@@ -29,31 +29,44 @@
 
 <script>
 
-const opts = {
-  hostname: 'api.upcitemdb.com',
-  path: '/prod/trial/lookup',
-  method: 'POST',
-  headers: {
-    "Content-Type": "application/json"
-  }
-}
-
 $(document).ready(() => {
   const database = firebase.database();
-
+  $('#status').html(''); // clear the HTML
   $('#upcLookupButton').click(() => {
     const upcCode = $('#barcodeBox').val();
+    if (upcCode == null) {
+      $('#status').append('Please enter a UPC code!');
+    }
     console.log(upcCode);
     $.ajax({
       method: 'POST',
       url: '/addItem/upcLookup?upc=' + upcCode,
+      datatype: 'json',
       success: (data) => {
-        $('#status').html(''); // clear the HTML
-        $('#status').append('JSON Data:');
-        $('#status').append(data);
+        console.log(data);
+        switch (data.statusCode) {
+          case 200:
+            console.log("OK");
+            $('#status').append('<p>JSON Data: </p>');
+            $.each(data.body.items, (index, element) => {
+              $('#status').append('<p>' + element.title + '</p>' + '</br>');
+              if (element.images) {
+                $('#status').append($('<img />', {
+                  src: element.images[0],
+                  class: 'item-image',
+                  id: 'img-upc-' + element.upc,
+                  alt: element.title
+                }));
+              }
+            });
+            break;
+          case 400:
+            console.log("wtf");
+            $('#status').append(data.body.message + ' Please try again.');
+            break;
+        }
       }
     });
-    console.log("Done");
   });
 
 });
