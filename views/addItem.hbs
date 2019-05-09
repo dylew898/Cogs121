@@ -28,7 +28,7 @@
 
   Item Name: <input id="nameBox" type="text" size="20" required="required"/>
   <br>
-  Item Barcode: <input id="barCode" type='text' size = '20'/>
+  Item Barcode: <input id="barCodeBox" type='text' size = '20'/>
   <br>
   Number: <input id="numBox" type='number' size="20" required="required"/>
   <br>
@@ -83,44 +83,48 @@ $(document).ready(() => {
       });
     }
   });
-  
+
   $('#insertButton').click(() => {
     const name = $('#nameBox').val();
     const units = $('#unitBox').val();
+    const barCode = $('#barCodeBox').val();
 
-    if( name == "" || units == "") {
+    if( name == "" || units == "" || barCode == "") {
       console.log('no input')
       return;
     }
-    const dbLink = name+"-"+units;
+    const dbLink = barCode + '/'+units;
     const key = 'items/' + dbLink;
     // 'once' reads the value once from the database
     database.ref(key).once('value', (snapshot) => {
       const data = snapshot.val();
       console.log('You received some data!', data);
+      console.log
+
+      //if no data exists in db add new entry
       if (!data) {
         // clear the display
-        database.ref('items/' + name+'-'+units).set({
+        // database.ref('items/' + name+'-'+units).set({
+        //   number: $('#numBox').val(),
+        //   unit: $('#unitBox').val()
+        // });
+
+        database.ref('items/' + barCode + '/'+units).set({
           number: $('#numBox').val(),
-          unit: $('#unitBox').val()
+          unit: $('#unitBox').val(),
+          name: $('#nameBox').val()
         });
         return;
       }
-      if (data.number && data.unit) {
+      if (data.number) {
         total = parseInt(data.number) + parseInt($('#numBox').val())
-        database.ref('items/' + name+'-'+units).set({
+        database.ref('items/' + barCode + '/'+units).set({
           number: total,
-          unit: $('#unitBox').val()
+          unit: $('#unitBox').val(),
+          name: $('#nameBox').val()
         });
         return;
-      } else {
-        // clear the display
-        database.ref('items/' + name+'-'+units).set({
-          number: $('#numBox').val(),
-          unit: $('#unitBox').val()
-        });
-        return;
-      }
+      } 
     });
   });
 
