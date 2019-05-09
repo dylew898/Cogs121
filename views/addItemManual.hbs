@@ -1,23 +1,23 @@
-<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+ <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
     <a class="navbar-brand" href="http://localhost:3000/">BackRoom</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-            <a class="nav-link" href="/viewInventory">View Inventory</a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link" href="/addItem">Add Item</a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link" href="/checkoutItem">Checkout Item</a>
-            </li>
-        </ul>
-        <div class="mt-2 mt-md-0">
-            <a href="/login" class="btn btn-outline-success my-2 my-sm-0" type="submit">Sign Out</a>
-        </div>
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+        <a class="nav-link" href="http://localhost:3000/viewInventory">View Inventory</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" href="http://localhost:3000/addItem">Add Item</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" href="http://localhost:3000/checkoutItem">Checkout Item</a>
+        </li>
+    </ul>
+    </div>
+    <div class="mt-2 mt-md-0">
+    <a href="http://localhost:3000/login" class="btn btn-outline-success my-2 my-sm-0" type="submit">Sign Out</a>
     </div>
 </nav>
 
@@ -28,26 +28,26 @@
 
 <form>
   <div class="form-group row">
-    <label for="nameBox" class="col align-self-start">Item Name</label>
-    <div class="col-sm">
+    <label for="nameBox" class="col">Item Name</label>
+    <div class="col-sm-8">
       <input type="text" class="form-control" id="nameBox" required="required">
     </div>
   </div>
   <div class="form-group row">
     <label for="barCode" class="col">Item Barcode</label>
-    <div class="col-sm">
+    <div class="col-sm-8">
       <input type="text" class="form-control" id="barCode" required="required">
     </div>
   </div>
   <div class="form-group row">
     <label for="numBox" class="col">Item Number</label>
-    <div class="col-sm">
+    <div class="col-sm-8">
       <input type="text" class="form-control" id="numBox" required="required">
     </div>
   </div>
   <div class="form-group row">
     <label for="unitBox" class="col">Units</label>
-    <div class="col-sm">
+    <div class="col-sm-8">
       <select class="form-control" id="unitBox" required="required">
         <option>Select Unit</option>
         <option>Boxes</option>
@@ -56,7 +56,7 @@
       </select>
     </div>
   </div>
-  <button type="button" class="btn btn-primary" id='insertButton'>Add Item</button>
+  <button type="button" class="btn btn-success" id='insertButton'>Add Item</button>
   <div id="status"></div>
 </form>
 
