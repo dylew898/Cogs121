@@ -19,8 +19,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/inventoryItem', (req, res) => {
-  if (req) {
-    console.log(req);
-  }
+  console.log(req.query);
+  res.render('inventoryItem', req.query);
 });
 module.exports = router;
