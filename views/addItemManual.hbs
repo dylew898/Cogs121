@@ -1,0 +1,152 @@
+ <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <a class="navbar-brand" href="http://localhost:3000/">BackRoom</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+        <a class="nav-link" href="http://localhost:3000/viewInventory">View Inventory</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" href="http://localhost:3000/addItem">Add Item</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" href="http://localhost:3000/checkoutItem">Checkout Item</a>
+        </li>
+    </ul>
+    </div>
+    <div class="mt-2 mt-md-0">
+    <a href="http://localhost:3000/login" class="btn btn-outline-success my-2 my-sm-0" type="submit">Sign Out</a>
+    </div>
+</nav>
+
+  <h1>{{title}}</h1>
+
+  <button id="resetButton">Reset database</button>
+  <hr/>
+
+<form>
+  <div class="form-group row">
+    <label for="nameBox" class="col align-self-start">Item Name</label>
+    <div class="col-sm">
+      <input type="text" class="form-control" id="nameBox" required="required">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="barCode" class="col">Item Barcode</label>
+    <div class="col-sm">
+      <input type="text" class="form-control" id="barCode" required="required">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="numBox" class="col">Item Number</label>
+    <div class="col-sm">
+      <input type="text" class="form-control" id="numBox" required="required">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="unitBox" class="col">Units</label>
+    <div class="col-sm">
+      <select class="form-control" id="unitBox" required="required">
+        <option>Select Unit</option>
+        <option>Boxes</option>
+        <option>Crates</option>
+        <option>Pallets</option>
+      </select>
+    </div>
+  </div>
+  <button type="button" class="btn btn-primary" id='insertButton'>Add Item</button>
+  <div id="status"></div>
+</form>
+
+
+<script>
+$(document).ready(() => {
+  const database = firebase.database();
+
+  database.ref('users/').on('value', (snapshot) => {
+    const allUsers = snapshot.val();
+    console.log('users/ changed:', allUsers);
+    if (allUsers) {
+      $('#status').html(''); // clear the HTML
+      $('#status').append('List of users:');
+      Object.keys(allUsers).forEach((name) => {
+        $('#status').append('<li>' + name + ' ' + allUsers[name].job + ' ' + allUsers[name].pet + '</li>');
+      });
+    }
+  });
+
+
+  $('#resetButton').click(() => {
+    console.log('Resetting the database');
+    /* remember the fake JavaScript object database from PetsApp v1?
+    const fakeDatabase = {
+      'Philip': {job: 'professor', pet: 'cat.jpg'},
+      'John': {job: 'student',   pet: 'dog.jpg'},
+      'Carol': {job: 'engineer',  pet: 'bear.jpg'}
+    };
+    */
+    database.ref('users/').remove(); // delete the entire collection
+    database.ref('items/').remove();
+    // writes data to the database:
+    database.ref('users/Philip').set({job: 'professor', pet: 'cat.jpg'});
+    database.ref('users/John').set({job: 'student',   pet: 'dog.jpg'});
+    database.ref('users/Carol').set({job: 'engineer',  pet: 'bear.jpg'});
+  });
+  // use .on('value' to get notified in real-time whenever anyone
+  // on the internet updates your database. cool!
+  database.ref('items/').on('value', (snapshot) => {
+    const allUsers = snapshot.val();
+    console.log('users/ changed:', allUsers);
+    if (allUsers) {
+      $('#status').html(''); // clear the HTML
+      $('#status').append('List of users:');
+      Object.keys(allUsers).forEach((name) => {
+        $('#status').append('<li>' + name + ' ' + allUsers[name].number + ' ' + allUsers[name].unit + '</li>');
+      });
+    }
+  });
+  
+  $('#insertButton').click(() => {
+    const name = $('#nameBox').val();
+    const units = $('#unitBox').val();
+
+    if( name == "" || units == "") {
+      console.log('no input')
+      return;
+    }
+    const dbLink = name+"-"+units;
+    const key = 'items/' + dbLink;
+    // 'once' reads the value once from the database
+    database.ref(key).once('value', (snapshot) => {
+      const data = snapshot.val();
+      console.log('You received some data!', data);
+      if (!data) {
+        // clear the display
+        database.ref('items/' + name+'-'+units).set({
+          number: $('#numBox').val(),
+          unit: $('#unitBox').val()
+        });
+        return;
+      }
+      if (data.number && data.unit) {
+        total = parseInt(data.number) + parseInt($('#numBox').val())
+        database.ref('items/' + name+'-'+units).set({
+          number: total,
+          unit: $('#unitBox').val()
+        });
+        return;
+      } else {
+        // clear the display
+        database.ref('items/' + name+'-'+units).set({
+          number: $('#numBox').val(),
+          unit: $('#unitBox').val()
+        });
+        return;
+      }
+    });
+  });
+
+});
+</script>

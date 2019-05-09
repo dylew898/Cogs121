@@ -33,7 +33,7 @@ router.get('/upcLookup', (req, res) => {
 });
 
 router.get('/manualEntry', (req,res) => {
-  res.render('manualEntry', {title: "Add Item - Manual Entry"});
+  res.render('addItemManual', {title: "Add Item - Manual Entry"});
 });
 
 router.post('/upcLookup', (req, res) => {
