@@ -114,6 +114,9 @@ $(document).ready(() => {
           unit: $('#unitBox').val(),
           name: $('#nameBox').val()
         });
+        database.ref('items/' + barCode ).update({
+          name: $('#nameBox').val()
+        });
         return;
       }
       if (data.number) {
@@ -124,7 +127,7 @@ $(document).ready(() => {
           name: $('#nameBox').val()
         });
         return;
-      } 
+      }
     });
   });
 

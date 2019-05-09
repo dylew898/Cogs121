@@ -26,14 +26,29 @@
 <button id="resetButton">Reset database</button>
 <hr/>
 
-Item Name: <input id="nameBox" type="text" size="20" required="required"/>
-<br>
-Item Barcode: <input id="barCode" type='text' size = '20'/>
-<br>
-Number: <input id="numBox" type='number' size="20" required="required"/>
+<div class="col-sm-4 row">
+  Item Name:
+  <select class="form-control" id="nameSelect">
+  <option value="">-- Select --</option>
+  </select>
+</div>
+
 <br>
 
-Units : <input id="unitBox" type='text' size = "20" required="required"/>
+<div class="col-sm-4">
+  Unit
+  <select class="form-control"  id="unitSelect">
+  <option value="">-- Select --</option>
+  </select>
+</div>
+
+<br>
+
+Item Barcode: <input id="barCodeBox" type='text' size = '20' readonly/>
+<br>
+Current Number: <input id="numBox" type='number' size="20" required="required" readonly/>
+<br>
+Checkout Number : <input id="checkNumBox" type='number' size="20" required="required" />
 <button id='checkoutButton'>Checkout Items</button>
 <div id="status"></div>
 
@@ -51,6 +66,21 @@ database.ref('users/').on('value', (snapshot) => {
       $('#status').append('<li>' + name + ' ' + allUsers[name].job + ' ' + allUsers[name].pet + '</li>');
     });
   }
+});
+
+var x = document.getElementById("nameSelect");
+
+
+database.ref('items/').on('value', (snapshot) => {
+
+  allItems = snapshot.val();
+  Object.keys(allItems).forEach((name) => {
+    var option = document.createElement("option");
+    option.text = allItems[name].name;
+    option.value = name;
+    x.add(option);
+
+  });
 });
 
 
@@ -83,15 +113,57 @@ database.ref('items/').on('value', (snapshot) => {
     });
   }
 });
-$('#checkoutButton').click(() => {
-  const name = $('#nameBox').val();
-  const units = $('#unitBox').val();
 
-  if( name == "" || units == "") {
+//auto populating
+$('#nameSelect').on('change', function(e){
+  var yourSelect = document.getElementById("nameSelect");
+  var selectedName = yourSelect.options[yourSelect.selectedIndex].value;
+  database.ref('items/' + selectedName).on('value', (snapshot) => {
+    var select = document.getElementById("unitSelect");
+    document.getElementById('unitSelect').innerHTML = "";
+    allItems = snapshot.val();
+
+    var option = document.createElement("option");
+    option.text = '--Select--';
+    select.add(option);
+    Object.keys(allItems).forEach((name) => {
+      if (name != 'name') {
+        var option = document.createElement("option");
+        option.text = name;
+        select.add(option);
+      }
+
+    });
+  });
+});
+
+$('#unitSelect').on('change', function(e){
+  var yourSelect = document.getElementById("nameSelect");
+  var selectedName = yourSelect.options[yourSelect.selectedIndex].value;
+
+  var unitSelect = document.getElementById("unitSelect");
+  var selectedUnit = unitSelect.options[unitSelect.selectedIndex].value;
+  database.ref('items/' + selectedName+ '/' + selectedUnit).on('value', (snapshot) => {
+    var vals = snapshot.val();
+    $('#barCodeBox').val(selectedName);
+    $('#numBox').val(vals.number);
+    console.log(selectedName)
+  });
+});
+
+
+$('#checkoutButton').click(() => {
+  const yourSelect = document.getElementById("nameSelect");
+  const name = yourSelect.options[yourSelect.selectedIndex].text;
+
+  const unitSelect = document.getElementById("unitSelect");
+  const units = unitSelect.options[unitSelect.selectedIndex].value;
+  const barCode = $('#barCodeBox').val();
+  if( name == "" || units == "" || $('#checkNumBox').val()=='') {
     console.log('no input')
     return;
   }
-  const dbLink = name+"-"+units;
+  const dbLink = barCode + '/'+units;
   const key = 'items/' + dbLink;
   // 'once' reads the value once from the database
   database.ref(key).once('value', (snapshot) => {
@@ -103,10 +175,11 @@ $('#checkoutButton').click(() => {
       return;
     }
     if (data.number && data.unit) {
-      total = parseInt(data.number) - parseInt($('#numBox').val())
-      database.ref('items/' + name+'-'+units).set({
+      total = parseInt(data.number) - parseInt($('#checkNumBox').val())
+      database.ref('items/' +barCode + '/'+units).set({
         number: total,
-        unit: $('#unitBox').val()
+        unit: units,
+        name: name
       });
       return;
     } else {
