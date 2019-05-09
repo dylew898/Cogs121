@@ -1,4 +1,3 @@
-
  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
     <a class="navbar-brand" href="http://localhost:3000/">BackRoom</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,21 +21,45 @@
     </div>
 </nav>
 
-  <h1>Add Items</h1>
+  <h1>{{title}}</h1>
 
   <button id="resetButton">Reset database</button>
   <hr/>
 
-  Item Name: <input id="nameBox" type="text" size="20" required="required"/>
-  <br>
-  Item Barcode: <input id="barCodeBox" type='text' size = '20'/>
-  <br>
-  Number: <input id="numBox" type='number' size="20" required="required"/>
-  <br>
-
-  Units : <input id="unitBox" type='text' size = "20" required="required"/>
-  <button id='insertButton'>Add Items</button>
+<form>
+  <div class="form-group row">
+    <label for="nameBox" class="col align-self-start">Item Name</label>
+    <div class="col-sm">
+      <input type="text" class="form-control" id="nameBox" required="required">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="barCode" class="col">Item Barcode</label>
+    <div class="col-sm">
+      <input type="text" class="form-control" id="barCode" required="required">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="numBox" class="col">Item Number</label>
+    <div class="col-sm">
+      <input type="text" class="form-control" id="numBox" required="required">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="unitBox" class="col">Units</label>
+    <div class="col-sm">
+      <select class="form-control" id="unitBox" required="required">
+        <option>Select Unit</option>
+        <option>Boxes</option>
+        <option>Crates</option>
+        <option>Pallets</option>
+      </select>
+    </div>
+  </div>
+  <button type="button" class="btn btn-primary" id='insertButton'>Add Item</button>
   <div id="status"></div>
+</form>
+
 
 <script>
 $(document).ready(() => {
@@ -84,48 +107,41 @@ $(document).ready(() => {
       });
     }
   });
-
+  
   $('#insertButton').click(() => {
     const name = $('#nameBox').val();
     const units = $('#unitBox').val();
-    const barCode = $('#barCodeBox').val();
 
-    if( name == "" || units == "" || barCode == "") {
+    if( name == "" || units == "") {
       console.log('no input')
       return;
     }
-    const dbLink = barCode + '/'+units;
+    const dbLink = name+"-"+units;
     const key = 'items/' + dbLink;
     // 'once' reads the value once from the database
     database.ref(key).once('value', (snapshot) => {
       const data = snapshot.val();
       console.log('You received some data!', data);
-      console.log
-
-      //if no data exists in db add new entry
       if (!data) {
         // clear the display
-        // database.ref('items/' + name+'-'+units).set({
-        //   number: $('#numBox').val(),
-        //   unit: $('#unitBox').val()
-        // });
-
-        database.ref('items/' + barCode + '/'+units).set({
+        database.ref('items/' + name+'-'+units).set({
           number: $('#numBox').val(),
-          unit: $('#unitBox').val(),
-          name: $('#nameBox').val()
-        });
-        database.ref('items/' + barCode ).update({
-          name: $('#nameBox').val()
+          unit: $('#unitBox').val()
         });
         return;
       }
-      if (data.number) {
+      if (data.number && data.unit) {
         total = parseInt(data.number) + parseInt($('#numBox').val())
-        database.ref('items/' + barCode + '/'+units).set({
+        database.ref('items/' + name+'-'+units).set({
           number: total,
-          unit: $('#unitBox').val(),
-          name: $('#nameBox').val()
+          unit: $('#unitBox').val()
+        });
+        return;
+      } else {
+        // clear the display
+        database.ref('items/' + name+'-'+units).set({
+          number: $('#numBox').val(),
+          unit: $('#unitBox').val()
         });
         return;
       }

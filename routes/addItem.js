@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const https = require('https');
+const unirest = require('unirest');
 const opts = {
   hostname: 'api.upcitemdb.com',
   path: '/prod/trial',
@@ -25,7 +26,7 @@ req.end()
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.render('addItem', {title: "Add Item"});
+  res.render('addItemOptions', {title: "Add Item"});
 });
 
 router.get('/upcLookup', (req, res) => {
@@ -33,17 +34,19 @@ router.get('/upcLookup', (req, res) => {
 });
 
 router.get('/manualEntry', (req,res) => {
-  res.render('manualEntry', {title: "Add Item - Manual Entry"});
+  res.render('addItemManual', {title: "Add Item - Manual Entry"});
 });
 
 router.post('/upcLookup', (req, res) => {
-  $.ajax({
-    url: 'https://api.upcitemdb.com/prod/trial/lookup?upc=' + req,
-    type: 'GET',
-    dataType: 'json',
-    success: (data) => {
-      console.log(data);
-      res.send(data);
+  unirest
+  .get('https://api.upcitemdb.com/prod/trial/lookup?upc=' + req.query.upc)
+  .headers({"Content-Type": "application/json"})
+  .end(response => {
+    if (response) {
+      res.json(response);
+    } else {
+      console.log("Not a valid UPC code!");
+      res.json({data: "Not a valid UPC code! Please try again."});
     }
   });
 });
