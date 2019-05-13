@@ -23,6 +23,7 @@
 
 
 <h1>{{title}}</h1>
+<hr/>
 
 <div id="status"></div>
 <script>
@@ -35,7 +36,6 @@ const database = firebase.database();
     console.log('items/ changed:', allItems);
     if (allItems) {
         $('#status').html(''); // clear the HTML
-        $('#status').append('List of items:');
         Object.keys(allItems).forEach((item) => {
             const newCard = $('<a>', {href:'viewInventory/inventoryItem?id='+item, class:"card mb-3", style:"max-width: 540px;"});
             const cardBlock = $('<div>', {class:"row no-gutters"});
