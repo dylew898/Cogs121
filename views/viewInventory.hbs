@@ -33,31 +33,38 @@ const database = firebase.database();
     // on the internet updates your database. cool!
     database.ref('items/').on('value', (snapshot) => {
     const allItems = snapshot.val();
-    console.log('items/ changed:', allItems);
+    $('#status').html(''); // clear the HTML
     if (allItems) {
-        $('#status').html(''); // clear the HTML
-        Object.keys(allItems).forEach((item) => {
-            const newCard = $('<a>', {href:'viewInventory/inventoryItem?id='+item, class:"card mb-3", style:"max-width: 540px;"});
-            const cardBlock = $('<div>', {class:"row no-gutters"});
-            const cardImageBlock = $('<div>', {class:"col-md-4"});
-            const cardImageStyle =  $('<img>', {
-                                                    width:'100%', 
-                                                    height:'100%', 
-                                                    src: 'https://klekt.s3.amazonaws.com/4995183-klekt-supreme-brick-normal.jpg',
-                                                    class:"card-img",
-                                                    alt: item
-                                                });
-            const cardTextBlock = $('<div>', {class:"col-md-8"});
-            const cardTextBody = $('<div>', {class:"card-body"});
-            const cardItemTitle = $('<h5>', {class:"card-text"}).append(item);
-            const cardItemAmount = $('<p>', {class:"card-text"}).append(allItems[item].number + ' ' + allItems[item].unit);
-            const cardTimestamp = $('<p class="card-text"><small class="text-muted">Last updated X mins ago</small></p>');
-            const card = newCard.append(cardBlock.append(cardImageBlock.append(cardImageStyle)));
-            
-            cardBlock.append(cardTextBlock.append(cardTextBody.append(cardItemTitle, cardItemAmount, cardTimestamp)));
-
-            $('#status').append(card);
-        });
+        Object.keys(allItems).forEach((id) => {
+            console.log(id);
+            const typeDict = allItems[id];
+            Object.keys(typeDict).forEach((type) => {
+                    if (type != "name") {
+                        console.log("ID: "+ id+" Name: "+ typeDict[type].name + " Type: " + type + " Number: "+ typeDict[type].number);
+                        const newCard = $('<a>', {href:'viewInventory/inventoryItem?id='+id, class:"card mb-3", style:"max-width: 540px;"});
+                        const cardBlock = $('<div>', {class:"row no-gutters"});
+                        const cardImageBlock = $('<div>', {class:"col-md-4"});
+                        const cardImageStyle =  $('<img>', {
+                                                                width:'100%', 
+                                                                height:'100%', 
+                                                                src: 'https://klekt.s3.amazonaws.com/4995183-klekt-supreme-brick-normal.jpg',
+                                                                class:"card-img",
+                                                                alt: id
+                                                            });
+                        const cardTextBlock = $('<div>', {class:"col-md-8"});
+                        const cardTextBody = $('<div>', {class:"card-body"});
+                        const cardItemTitle = $('<h5>', {class:"card-text"}).append(typeDict[type].name);
+                        const cardItemAmount = $('<p>', {class:"card-text"}).append(typeDict[type].number + ' ' + type);
+                        const cardTimestamp = $('<p class="card-text"><small class="text-muted">Last updated X mins ago</small></p>');
+                        const card = newCard.append(cardBlock.append(cardImageBlock.append(cardImageStyle)));
+                        
+                        cardBlock.append(cardTextBlock.append(cardTextBody.append(cardItemTitle, cardItemAmount, cardTimestamp)));
+                        $('#status').append(card);
+                    }
+                });
+            });
+        } else {
+            $('#status').append($('<p>').append("You have no items in your inventory."));
         }
     });
 });

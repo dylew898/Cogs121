@@ -48,7 +48,7 @@
   <div class="form-group row">
     <label for="unitBox" class="col-sm-2">Units</label>
     <div class="col-sm-4">
-      <input id="unitBox" type='text' size = "20" required="required"/>
+      <input id="unitBox" class="form-control" type='text' size = "20" required="required"/>
     </div>
   </div>
   <div class="form-group row">
@@ -63,20 +63,19 @@
 $(document).ready(() => {
   const database = firebase.database();
 
-  database.ref('items/').on('value', (snapshot) => {
-    const allItems = snapshot.val();
-    console.log('items/ changed:', allItems);
-    if (allItems) {
-      $('#status').html(''); // clear the HTML
-      $('#status').append('List of items:');
-      Object.keys(allItems).forEach((itemBarcode) => {
-        var option = document.createElement("option");
-        option.text = allItems[itemBarcode].itemBarcode;
-        option.value = itemBarcode;
-        $('#status').append('<li>' + option.text + option.value + '</li>');
+
+  database.ref('items/' ).on('value', (snapshot) => {
+    allItems = snapshot.val();
+    Object.keys(allItems).forEach((id) => {
+      console.log(id);
+      const typeDict = allItems[id]
+        Object.keys(typeDict).forEach((type) => {
+          if(type != "name"){
+            console.log("ID: "+ id+" Name: "+ typeDict[type].name + " Type: " + type + " Number: "+ typeDict[type].number)
+          }
+        });
       });
-    }
-  });
+    });
 
 
   $('#resetButton').click(() => {
@@ -88,12 +87,8 @@ $(document).ready(() => {
       'Carol': {job: 'engineer',  pet: 'bear.jpg'}
     };
     */
-    database.ref('users/').remove(); // delete the entire collection
     database.ref('items/').remove();
-    // writes data to the database:
-    database.ref('users/Philip').set({job: 'professor', pet: 'cat.jpg'});
-    database.ref('users/John').set({job: 'student',   pet: 'dog.jpg'});
-    database.ref('users/Carol').set({job: 'engineer',  pet: 'bear.jpg'});
+    alert("Firebase DB reset!");
   });
 
   $('#insertButton').click(() => {
@@ -141,6 +136,7 @@ $(document).ready(() => {
         return;
       }
     });
+    document.location.href = '/viewInventory';
   });
 
 });
