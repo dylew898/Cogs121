@@ -41,7 +41,7 @@ const database = firebase.database();
             Object.keys(typeDict).forEach((type) => {
                     if (type != "name") {
                         console.log("ID: "+ id+" Name: "+ typeDict[type].name + " Type: " + type + " Number: "+ typeDict[type].number);
-                        const newCard = $('<a>', {href:'viewInventory/inventoryItem?id='+id, class:"card mb-3", style:"max-width: 540px;"});
+                        const newCard = $('<a>', {href:'viewInventory/inventoryItem?id='+id+'&type='+type, class:"card mb-3", style:"max-width: 540px;"});
                         const cardBlock = $('<div>', {class:"row no-gutters"});
                         const cardImageBlock = $('<div>', {class:"col-md-4"});
                         const cardImageStyle =  $('<img>', {

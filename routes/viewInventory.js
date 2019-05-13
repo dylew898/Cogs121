@@ -20,6 +20,12 @@ router.get('/', function(req, res, next) {
 
 router.get('/inventoryItem', (req, res) => {
   console.log(req.query);
-  res.render('inventoryItem', req.query);
+  database.ref('items/'+req.query.id+'/'+req.query.type).on('value', (snapshot) => {
+    const item = snapshot.val();
+    console.log(item);
+    res.render('inventoryItem', {
+      queryItem: item
+    });
+  });
 });
 module.exports = router;
