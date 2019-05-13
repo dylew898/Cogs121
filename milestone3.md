@@ -15,8 +15,6 @@ We have our UI skeletons mainly through the Add item and Checkout Item skeletons
 #### View Inventory
 <img width="608" alt="View inventory FINAL" src="https://user-images.githubusercontent.com/46572829/57644386-dad9bb00-7570-11e9-8523-9b946bc9b594.png">
 
-<img width="628" alt="Individual Card FINAL" src="https://user-images.githubusercontent.com/46572829/57644412-e75e1380-7570-11e9-80a5-25fc2a7d8744.png">
-
 #### Checkout
 <img width="442" alt="checkout FINAL" src="https://user-images.githubusercontent.com/46572829/57644439-f218a880-7570-11e9-8902-e630670f463a.png">
 
