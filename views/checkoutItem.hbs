@@ -22,8 +22,6 @@
 </nav>
 
 <h1>{{title}}</h1>
-
-<button id="resetButton">Reset database</button>
 <hr/>
 
 <div class="form-group row">
@@ -66,6 +64,11 @@
 </div>
 
 <button type="button" class="btn btn-danger" id='checkoutButton'>Checkout Items</button>
+
+<!-- Remove status for final turn-in! -->
+<br/>
+<br/>
+<br/>
 <div id="status"></div>
 
 
@@ -73,17 +76,21 @@
 $(document).ready(() => {
 const database = firebase.database();
 
-database.ref('users/').on('value', (snapshot) => {
-  const allUsers = snapshot.val();
-  console.log('users/ changed:', allUsers);
-  if (allUsers) {
-    $('#status').html(''); // clear the HTML
-    $('#status').append('List of users:');
-    Object.keys(allUsers).forEach((name) => {
-      $('#status').append('<li>' + name + ' ' + allUsers[name].job + ' ' + allUsers[name].pet + '</li>');
+database.ref('items/' ).on('value', (snapshot) => {
+    allItems = snapshot.val();
+    Object.keys(allItems).forEach((id) => {
+      console.log(id);
+      const typeDict = allItems[id]
+      $('#status').html('');
+      $('#status').append('Data from Firebase:')
+      Object.keys(typeDict).forEach((type) => {
+        if(type != "name"){
+          console.log("Barcode ID: "+ id+" Name: "+ typeDict[type].name + " Type: " + type + " Number: "+ typeDict[type].number);
+          $('#status').append($('<li>').append("Barcode: "+ id+" Name: "+ typeDict[type].name + " Type: " + type + " Number: "+ typeDict[type].number));
+        }
+      });
     });
-  }
-});
+  });
 
 var x = document.getElementById("nameSelect");
 
@@ -98,37 +105,6 @@ database.ref('items/').on('value', (snapshot) => {
     x.add(option);
 
   });
-});
-
-
-$('#resetButton').click(() => {
-  console.log('Resetting the database');
-  /* remember the fake JavaScript object database from PetsApp v1?
-  const fakeDatabase = {
-    'Philip': {job: 'professor', pet: 'cat.jpg'},
-    'John': {job: 'student',   pet: 'dog.jpg'},
-    'Carol': {job: 'engineer',  pet: 'bear.jpg'}
-  };
-  */
-  database.ref('users/').remove(); // delete the entire collection
-  database.ref('items/').remove();
-  // writes data to the database:
-  database.ref('users/Philip').set({job: 'professor', pet: 'cat.jpg'});
-  database.ref('users/John').set({job: 'student',   pet: 'dog.jpg'});
-  database.ref('users/Carol').set({job: 'engineer',  pet: 'bear.jpg'});
-});
-// use .on('value' to get notified in real-time whenever anyone
-// on the internet updates your database. cool!
-database.ref('items/').on('value', (snapshot) => {
-  const allUsers = snapshot.val();
-  console.log('users/ changed:', allUsers);
-  if (allUsers) {
-    $('#status').html(''); // clear the HTML
-    $('#status').append('List of users:');
-    Object.keys(allUsers).forEach((name) => {
-      $('#status').append('<li>' + name + ' ' + allUsers[name].number + ' ' + allUsers[name].unit + '</li>');
-    });
-  }
 });
 
 //auto populating
@@ -188,24 +164,26 @@ $('#checkoutButton').click(() => {
     console.log('You received some data!', data);
     if (!data) {
       // clear the display
-      console.log('Item Does not Exist');
+      console.log('Item does not Exist');
       return;
     }
     if (data.number && data.unit) {
-      total = parseInt(data.number) - parseInt($('#checkNumBox').val())
-      database.ref('items/' +barCode + '/'+units).set({
-        number: total,
-        unit: units,
-        name: name
-      });
-      return;
-    } else {
-      // clear the display
-      console.log("error");
-      return;
-    }
+      const checkoutAmount = parseInt($('#checkNumBox').val());
+      if (data.number >= checkoutAmount) {
+        total = parseInt(data.number) - checkoutAmount;
+        database.ref('items/' +barCode + '/'+units).set({
+          number: total,
+          unit: units,
+          name: name
+        });
+      } else {
+        // clear the display
+        console.log("error");
+        alert("ERROR: Checkout amount is greater than available!")
+      }
+        return;
+      }
+    });
   });
-});
-
 });
 </script>
