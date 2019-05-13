@@ -6,3 +6,14 @@ We have our UI skeletons mainly through the Add item and Checkout Item skeletons
 
 ### UI Skeletons
 
+#### Add Item
+![Add item milestone3 Final](https://user-images.githubusercontent.com/46572829/57594683-1edbaa00-74f6-11e9-8745-92e50a5b77ad.png)
+
+#### UPC Lookup
+![UPCLookup Milestone3Final](https://user-images.githubusercontent.com/46572829/57594699-387cf180-74f6-11e9-9d37-eaad511862f7.png)
+
+#### View Inventory
+![view inventory milestone 3 Final](https://user-images.githubusercontent.com/46572829/57594761-7da12380-74f6-11e9-8621-a1be76a56bba.png)
+
+#### Checkout
+![Checkout Milestone3Final](https://user-images.githubusercontent.com/46572829/57594721-54809300-74f6-11e9-9f2a-22a8139a6ba8.png)
