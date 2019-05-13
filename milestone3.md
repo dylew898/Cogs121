@@ -7,13 +7,18 @@ We have our UI skeletons mainly through the Add item and Checkout Item skeletons
 ### UI Skeletons
 
 #### Add Item
-![Add item milestone3 Final](https://user-images.githubusercontent.com/46572829/57594683-1edbaa00-74f6-11e9-8745-92e50a5b77ad.png)
+<img width="413" alt="Add item FINAL" src="https://user-images.githubusercontent.com/46572829/57644317-ba116580-7570-11e9-8d1f-fc9b215befb1.png">
+
+<img width="526" alt="Manual FINAL" src="https://user-images.githubusercontent.com/46572829/57644350-ca294500-7570-11e9-9655-747dca74ed4d.png">
 
 #### UPC Lookup
-![UPCLookup Milestone3Final](https://user-images.githubusercontent.com/46572829/57594699-387cf180-74f6-11e9-9d37-eaad511862f7.png)
+<img width="581" alt="UPC FINAL" src="https://user-images.githubusercontent.com/46572829/57644371-d31a1680-7570-11e9-9a7b-9ed1e273ef58.png">
 
 #### View Inventory
-![view inventory milestone 3 Final](https://user-images.githubusercontent.com/46572829/57594761-7da12380-74f6-11e9-8621-a1be76a56bba.png)
+<img width="608" alt="View inventory FINAL" src="https://user-images.githubusercontent.com/46572829/57644386-dad9bb00-7570-11e9-8523-9b946bc9b594.png">
+
+<img width="628" alt="Individual Card FINAL" src="https://user-images.githubusercontent.com/46572829/57644412-e75e1380-7570-11e9-80a5-25fc2a7d8744.png">
 
 #### Checkout
-![Checkout Milestone3Final](https://user-images.githubusercontent.com/46572829/57594721-54809300-74f6-11e9-9f2a-22a8139a6ba8.png)
+<img width="442" alt="checkout FINAL" src="https://user-images.githubusercontent.com/46572829/57644439-f218a880-7570-11e9-8902-e630670f463a.png">
+
