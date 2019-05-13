@@ -9,8 +9,6 @@ We have our UI skeletons mainly through the Add item and Checkout Item skeletons
 #### Add Item
 <img width="413" alt="Add item FINAL" src="https://user-images.githubusercontent.com/46572829/57644317-ba116580-7570-11e9-8d1f-fc9b215befb1.png">
 
-<img width="526" alt="Manual FINAL" src="https://user-images.githubusercontent.com/46572829/57644350-ca294500-7570-11e9-9655-747dca74ed4d.png">
-
 #### UPC Lookup
 <img width="581" alt="UPC FINAL" src="https://user-images.githubusercontent.com/46572829/57644371-d31a1680-7570-11e9-9a7b-9ed1e273ef58.png">
 
