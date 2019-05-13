@@ -49,12 +49,12 @@
 <button type="button" class="btn btn-danger" id='checkoutButton'>Checkout Items</button>
 <div id="status"></div>
 
-{{!--
+
 Item Barcode: <input id="barCodeBox" type='text' size = '20' readonly/>
 <br>
 Current Number: <input id="numBox" type='number' size="20" required="required" readonly/>
 <br>
-Checkout Number : <input id="checkNumBox" type='number' size="20" required="required" /> --}}
+Checkout Number : <input id="checkNumBox" type='number' size="20" required="required" />
 
 
 <script>
@@ -170,6 +170,7 @@ $('#checkoutButton').click(() => {
   }
   const dbLink = barCode + '/'+units;
   const key = 'items/' + dbLink;
+  console.log(key)
   // 'once' reads the value once from the database
   database.ref(key).once('value', (snapshot) => {
     const data = snapshot.val();
