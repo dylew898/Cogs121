@@ -63,14 +63,17 @@
 $(document).ready(() => {
   const database = firebase.database();
 
-  database.ref('users/').on('value', (snapshot) => {
-    const allUsers = snapshot.val();
-    console.log('users/ changed:', allUsers);
-    if (allUsers) {
+  database.ref('items/').on('value', (snapshot) => {
+    const allItems = snapshot.val();
+    console.log('items/ changed:', allItems);
+    if (allItems) {
       $('#status').html(''); // clear the HTML
-      $('#status').append('List of users:');
-      Object.keys(allUsers).forEach((name) => {
-        $('#status').append('<li>' + name + ' ' + allUsers[name].job + ' ' + allUsers[name].pet + '</li>');
+      $('#status').append('List of items:');
+      Object.keys(allItems).forEach((itemBarcode) => {
+        var option = document.createElement("option");
+        option.text = allItems[itemBarcode].itemBarcode;
+        option.value = itemBarcode;
+        $('#status').append('<li>' + option.text + option.value + '</li>');
       });
     }
   });
@@ -91,19 +94,6 @@ $(document).ready(() => {
     database.ref('users/Philip').set({job: 'professor', pet: 'cat.jpg'});
     database.ref('users/John').set({job: 'student',   pet: 'dog.jpg'});
     database.ref('users/Carol').set({job: 'engineer',  pet: 'bear.jpg'});
-  });
-  // use .on('value' to get notified in real-time whenever anyone
-  // on the internet updates your database. cool!
-  database.ref('items/').on('value', (snapshot) => {
-    const allUsers = snapshot.val();
-    console.log('users/ changed:', allUsers);
-    if (allUsers) {
-      $('#status').html(''); // clear the HTML
-      $('#status').append('List of users:');
-      Object.keys(allUsers).forEach((name) => {
-        $('#status').append('<li>' + name + ' ' + allUsers[name].number + ' ' + allUsers[name].unit + '</li>');
-      });
-    }
   });
 
   $('#insertButton').click(() => {
