@@ -25,6 +25,15 @@
 <hr/>
 
 <div class="form-group row">
+  <label for="locationSelect" class="col-sm-2">Item Location</label>
+  <div class="col-4">
+    <select class="form-control" id="locationSelect">
+    <option value="">-- Select --</option>
+    </select>
+  </div>
+</div>
+
+<div class="form-group row">
   <label for="nameSelect" class="col-sm-2">Item Name</label>
   <div class="col-4">
     <select class="form-control" id="nameSelect">
@@ -57,13 +66,13 @@
 </div>
 
 <div class="form-group row">
-    <label for="nameSelect" class="col-sm-2">Number To Add</label>
+    <label for="nameSelect" class="col-sm-2">Add Amount</label>
     <div class="col-4">
     <input class="form-control" id="checkNumBox" type='number' size="20" required="required" />
   </div>
 </div>
 
-<button type="button" class="btn btn-danger" id='checkoutButton'>Update Item</button>
+<button type="button" class="btn btn-danger" id='checkoutButton'>Update Items</button>
 
 <!-- Remove status for final turn-in! -->
 <br/>
@@ -92,15 +101,14 @@ database.ref('items/' ).on('value', (snapshot) => {
     });
   });
 
-var x = document.getElementById("nameSelect");
+var x = document.getElementById("locationSelect");
 
 
 database.ref('items/').on('value', (snapshot) => {
-
   allItems = snapshot.val();
   Object.keys(allItems).forEach((name) => {
     var option = document.createElement("option");
-    option.text = allItems[name].name;
+    option.text = name;
     option.value = name;
     x.add(option);
 
@@ -108,10 +116,35 @@ database.ref('items/').on('value', (snapshot) => {
 });
 
 //auto populating
+
+$('#locationSelect').on('change', function(e){
+  var yourSelect = document.getElementById("locationSelect");
+  var selectedName = yourSelect.options[yourSelect.selectedIndex].value;
+  database.ref('items/' + selectedName).on('value', (snapshot) => {
+    var select = document.getElementById("nameSelect");
+    document.getElementById('nameSelect').innerHTML = "";
+    allItems = snapshot.val();
+
+    var option = document.createElement("option");
+    option.text = '--Select--';
+    select.add(option);
+    Object.keys(allItems).forEach((name) => {
+      var option = document.createElement("option");
+
+      option.text = allItems[name].name;
+      option.value = name;
+      select.add(option);
+    });
+  });
+});
+
+
 $('#nameSelect').on('change', function(e){
   var yourSelect = document.getElementById("nameSelect");
   var selectedName = yourSelect.options[yourSelect.selectedIndex].value;
-  database.ref('items/' + selectedName).on('value', (snapshot) => {
+  var locationSelect = document.getElementById("locationSelect");
+  var location = locationSelect.options[locationSelect.selectedIndex].value;
+  database.ref('items/' + location+'/'+selectedName).on('value', (snapshot) => {
     var select = document.getElementById("unitSelect");
     document.getElementById('unitSelect').innerHTML = "";
     allItems = snapshot.val();
@@ -132,10 +165,11 @@ $('#nameSelect').on('change', function(e){
 $('#unitSelect').on('change', function(e){
   var yourSelect = document.getElementById("nameSelect");
   var selectedName = yourSelect.options[yourSelect.selectedIndex].value;
-
+  var locationSelect = document.getElementById("locationSelect");
+  var location = locationSelect.options[locationSelect.selectedIndex].value;
   var unitSelect = document.getElementById("unitSelect");
   var selectedUnit = unitSelect.options[unitSelect.selectedIndex].value;
-  database.ref('items/' + selectedName+ '/' + selectedUnit).on('value', (snapshot) => {
+  database.ref('items/' + location+'/'+selectedName+ '/' + selectedUnit).on('value', (snapshot) => {
     var vals = snapshot.val();
     $('#barCodeBox').val(selectedName);
     $('#numBox').val(vals.number);
@@ -150,12 +184,16 @@ $('#checkoutButton').click(() => {
 
   const unitSelect = document.getElementById("unitSelect");
   const units = unitSelect.options[unitSelect.selectedIndex].value;
+
+  var locationSelect = document.getElementById("locationSelect");
+  var location = locationSelect.options[locationSelect.selectedIndex].value;
+
   const barCode = $('#barCodeBox').val();
   if( name == "" || units == "" || $('#checkNumBox').val()=='') {
     console.log('no input')
     return;
   }
-  const dbLink = barCode + '/'+units;
+  const dbLink = location+'/'+barCode + '/'+units;
   const key = 'items/' + dbLink;
   console.log(key)
   // 'once' reads the value once from the database
@@ -167,11 +205,14 @@ $('#checkoutButton').click(() => {
       console.log('Item does not Exist');
       return;
     }
-    if (data.number && data.unit) {
+    if (data.unit) {
       const checkoutAmount = parseInt($('#checkNumBox').val());
-      if (data.number >= checkoutAmount) {
+      console.log('hi');
+
+      if (data.unit) {
+        console.log('hi');
         total = parseInt(data.number) + checkoutAmount;
-        database.ref('items/' +barCode + '/'+units).set({
+        database.ref('items/' +location+'/'+barCode + '/'+units).set({
           number: total,
           unit: units,
           name: name

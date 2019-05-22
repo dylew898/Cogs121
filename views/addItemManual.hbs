@@ -34,6 +34,12 @@
     </div>
   </div>
   <div class="form-group row">
+    <label for="locationBox" class="col-sm-2">Item Location</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" id="locationBox" required="required">
+    </div>
+  </div>
+  <div class="form-group row">
     <label for="barCode" class="col-sm-2">Item Barcode</label>
     <div class="col-sm-4">
       <input type="text" class="form-control" id="barCodeBox" required="required">
@@ -95,13 +101,14 @@ $(document).ready(() => {
     const name = $('#nameBox').val();
     const units = $('#unitBox').val();
     const barCode = $('#barCodeBox').val();
-
+    const location = $('#locationBox').val();
     if( name == "" || units == "" || barCode == "") {
       console.log('no input')
       return;
     }
-    const dbLink = barCode + '/'+units;
+    const dbLink = location + '/'+barCode + '/'+units;
     const key = 'items/' + dbLink;
+    console.log(dbLink);
     // 'once' reads the value once from the database
     database.ref(key).once('value', (snapshot) => {
       const data = snapshot.val();
@@ -116,20 +123,20 @@ $(document).ready(() => {
         //   unit: $('#unitBox').val()
         // });
 
-        database.ref('items/' + barCode + '/'+units).set({
+        database.ref('items/' +location+'/'+ barCode + '/'+units).set({
           number: $('#numBox').val(),
           unit: $('#unitBox').val(),
           name: $('#nameBox').val(),
           barcode: barCode
         });
-        database.ref('items/' + barCode ).update({
+        database.ref('items/' + location+ '/'+barCode ).update({
           name: $('#nameBox').val()
         });
         return;
       }
       if (data.number) {
         total = parseInt(data.number) + parseInt($('#numBox').val())
-        database.ref('items/' + barCode + '/'+units).set({
+        database.ref('items/' +location+'/'+ barCode + '/'+units).set({
           number: total,
           unit: $('#unitBox').val(),
           name: $('#nameBox').val(),
@@ -138,7 +145,7 @@ $(document).ready(() => {
         return;
       }
     });
-    document.location.href = '/viewInventory';
+    // document.location.href = '/viewInventory';
   });
 
 });
