@@ -10,4 +10,7 @@ a {
 p {
   font-size: 16px; }
 
+form {
+  max-width: 1000px; }
+
 /*# sourceMappingURL=style.css.map */

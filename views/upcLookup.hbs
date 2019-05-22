@@ -23,17 +23,63 @@
 
   <h1>Add Item - UPC Lookup</h1>
   <hr/>
-  Item Barcode: <input id="barcodeBox" type='text' size = '20'/>
-  <button id='upcLookupButton'>Lookup UPC</button>
   <div id="status"></div>
+  
+  <form>
+  <div class="form-group row">
+    <label for="barCode" class="col-sm-2">Item Barcode</label>
+    <div class="col-sm-4 input-group">
+      <input type="text" class="form-control" id="barCodeBox" required="required">
+      <button class="btn btn-default" id='upcLookupButton'>
+        <i class="fas fa-search"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="nameBox" class="col-sm-2">Item Name</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" id="nameBox" required="required">
+    </div>
+  </div>
+
+
+  <div class="form-group row">
+    <label for="itemImg" class="col-sm-2">Item Image</label>
+    <div class="col-sm-4">
+      <input type="file" id="imgInput" name="pic" accept="image/*">
+      <img style="max-width: 300px; max-height: 300px;" id="itemImg" src="#" alt="Your Image."/>
+    </div>
+  </div>
+  
+  <div class="form-group row">
+    <label for="numBox" class="col-sm-2">Item Quantity</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" id="numBox" required="required">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="unitBox" class="col-sm-2">Units</label>
+    <div class="col-sm-4">
+      <input id="unitBox" class="form-control" type='text' size = "20" required="required"/>
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-sm-12">
+      <button type="button" class="btn btn-success" id='insertButton'>Add Item</button>
+      <div id="status"></div>
+    </div>
+  </div>
+</form>
 
 <script>
 
 $(document).ready(() => {
   const database = firebase.database();
   $('#status').html(''); // clear the HTML
+  $('#itemImg').hide();
   $('#upcLookupButton').click(() => {
-    const upcCode = $('#barcodeBox').val();
+    const upcCode = $('#barCodeBox').val();
     if (upcCode == null) {
       $('#status').append('Please enter a UPC code!');
     }
@@ -46,18 +92,9 @@ $(document).ready(() => {
         console.log(data);
         switch (data.statusCode) {
           case 200:
-            console.log("OK");
-            $('#status').append('<p>JSON Data: </p>');
             $.each(data.body.items, (index, element) => {
-              $('#status').append('<p>' + element.title + '</p>' + '</br>');
-              if (element.images) {
-                $('#status').append($('<img />', {
-                  src: element.images[0],
-                  class: 'item-image',
-                  id: 'img-upc-' + element.upc,
-                  alt: element.title
-                }));
-              }
+              $('#nameBox').val(element.title);
+              $('#barCodeBox').val(element.upc);
             });
             break;
           case 400:
@@ -66,6 +103,22 @@ $(document).ready(() => {
         }
       }
     });
+  });
+
+  function readURL(input) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+
+      reader.onload = function(e) {
+        $('#itemImg').attr('src', e.target.result);
+        $('#itemImg').show();
+      }
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  $("#imgInput").change(function() {
+    readURL(this);
   });
 
 });
