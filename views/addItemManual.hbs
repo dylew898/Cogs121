@@ -119,7 +119,8 @@ $(document).ready(() => {
         database.ref('items/' + barCode + '/'+units).set({
           number: $('#numBox').val(),
           unit: $('#unitBox').val(),
-          name: $('#nameBox').val()
+          name: $('#nameBox').val(),
+          barcode: barCode
         });
         database.ref('items/' + barCode ).update({
           name: $('#nameBox').val()
@@ -131,7 +132,8 @@ $(document).ready(() => {
         database.ref('items/' + barCode + '/'+units).set({
           number: total,
           unit: $('#unitBox').val(),
-          name: $('#nameBox').val()
+          name: $('#nameBox').val(),
+          barcode: barCode
         });
         return;
       }
