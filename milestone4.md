@@ -26,4 +26,4 @@ For this user action case, we are asking the user to look up an item's barcode t
 ### User Action 2
 For this user action case, we are asking the user to checkout items, verifying that the database will update its current inventory depending on how much the user decides to checkout. 
 
-- View and take note of what the current inventory is for food boxes. Navigate through the interface and checkout 10 boxes of food. Afterwards, view the current inventory and verify that food boxes has 10 less than its current stock
+- View and take note of what the current inventory is for food boxes. Navigate through the interface and checkout 20 boxes of cups. Afterwards, view the current inventory and verify that cup boxes has 20 less than its current stock
