@@ -11,7 +11,7 @@ const loginRouter = require('./routes/login');
 const addItemRouter = require('./routes/addItem');
 const viewInventoryRouter = require('./routes/viewInventory');
 const checkoutItemRouter = require('./routes/checkoutItem');
-
+const updateExistingRouter = require('./routes/updateExisting')
 
 const app = express();
 
@@ -37,6 +37,7 @@ app.use('/login', loginRouter);
 app.use('/addItem', addItemRouter);
 app.use('/viewInventory', viewInventoryRouter);
 app.use('/checkoutItem', checkoutItemRouter);
+app.use('/addItem/updateExisting', updateExistingRouter);
 
 
 // catch 404 and forward to error handler
