@@ -26,29 +26,40 @@
   <button id="resetButton">Reset database</button>
   <hr/>
 
-<form>
+  <form>
+  <div class="form-group row">
+    <label for="barCode" class="col-sm-2">Item Barcode</label>
+    <div class="col-sm-4 input-group">
+      <input type="text" class="form-control" id="barCodeBox" required="required">
+    </div>
+  </div>
+
   <div class="form-group row">
     <label for="nameBox" class="col-sm-2">Item Name</label>
     <div class="col-sm-4">
       <input type="text" class="form-control" id="nameBox" required="required">
     </div>
   </div>
+
   <div class="form-group row">
     <label for="locationBox" class="col-sm-2">Item Location</label>
     <div class="col-sm-4">
       <input type="text" class="form-control" id="locationBox" required="required">
     </div>
   </div>
+
   <div class="form-group row">
-    <label for="barCode" class="col-sm-2">Item Barcode</label>
+    <label for="itemImg" class="col-sm-2">Item Image</label>
     <div class="col-sm-4">
-      <input type="text" class="form-control" id="barCodeBox" required="required">
+      <input type="file" id="imgInput" name="pic" accept="image/*">
+      <img style="max-width: 300px; max-height: 300px;" id="itemImg" src="#" alt="Your Image."/>
     </div>
   </div>
+  
   <div class="form-group row">
     <label for="numBox" class="col-sm-2">Item Quantity</label>
     <div class="col-sm-4">
-      <input type="text" class="form-control" id="numBox" required="required">
+      <input type="number" class="form-control" id="numBox" required="required">
     </div>
   </div>
   <div class="form-group row">
@@ -66,9 +77,30 @@
 </form>
 
 <script>
+var selectedFile;
 $(document).ready(() => {
   const database = firebase.database();
+  const storage = firebase.storage();
 
+  $('#status').html(''); // clear the HTML
+  $('#itemImg').hide();
+
+  function readURL(input) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+
+      reader.onload = function(e) {
+        $('#itemImg').attr('src', e.target.result);
+        $('#itemImg').show();
+      }
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  $("#imgInput").change(function() {
+    readURL(this);
+    selectedFile = event.target.files[0];
+  });
 
   database.ref('items/' ).on('value', (snapshot) => {
     allItems = snapshot.val();
@@ -82,7 +114,6 @@ $(document).ready(() => {
         });
       });
     });
-
 
   $('#resetButton').click(() => {
     console.log('Resetting the database');
@@ -102,140 +133,91 @@ $(document).ready(() => {
     const units = $('#unitBox').val();
     const barCode = $('#barCodeBox').val();
     const location = $('#locationBox').val();
-    if( name == "" || units == "" || barCode == "") {
+    if(name == "" || units == "" || barCode == "") {
       console.log('no input')
       return;
     }
-    const dbLink = location + '/'+barCode + '/'+units;
+    const dbLink = location + '/' +barCode + '/'+units;
     const key = 'items/' + dbLink;
     console.log(dbLink);
     // 'once' reads the value once from the database
     database.ref(key).once('value', (snapshot) => {
       const data = snapshot.val();
       console.log('You received some data!', data);
-      console.log
 
+      const directory = 'items/' + location +'/'+ barCode + '/'+ units + '/'
+      const imgURL = uploadImages(selectedFile, directory);
+      console.log(imgURL);
       //if no data exists in db add new entry
       if (!data) {
-        // clear the display
-        // database.ref('items/' + name+'-'+units).set({
-        //   number: $('#numBox').val(),
-        //   unit: $('#unitBox').val()
-        // });
-
-        database.ref('items/' +location+'/'+ barCode + '/'+units).set({
+        database.ref('items/' + location + '/' + barCode + '/'+units).set({
           number: $('#numBox').val(),
           unit: $('#unitBox').val(),
           name: $('#nameBox').val(),
+          image: null,
           barcode: barCode
         });
-        database.ref('items/' + location+ '/'+barCode ).update({
+        database.ref('items/' + location + '/' + barCode ).update({
           name: $('#nameBox').val()
         });
-        return;
       }
-      if (data.number) {
+      else if (data.number) {
         total = parseInt(data.number) + parseInt($('#numBox').val())
-        database.ref('items/' +location+'/'+ barCode + '/'+units).set({
+        database.ref('items/' + location +'/'+ barCode + '/'+units).set({
           number: total,
           unit: $('#unitBox').val(),
           name: $('#nameBox').val(),
+          image: null,
           barcode: barCode
         });
-        return;
       }
+      uploadImages(selectedFile, directory);
     });
-    // document.location.href = '/viewInventory';
   });
 
+  function uploadImages(file, reference) {
+    if (reference) {
+      if (file) {
+        var metadata = {
+          contentType: 'image/jpeg',
+        };
+        var storageRef = firebase.storage().ref(reference+ file.name);
+        var uploadTask = storageRef.put(file, metadata);
+        uploadTask.on('state_changed', function(snapshot){
+        // Observe state change events such as progress, pause, and resume
+        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log('Upload is ' + progress + '% done');
+        switch (snapshot.state) {
+          case firebase.storage.TaskState.PAUSED: // or 'paused'
+            console.log('Upload is paused');
+            break;
+          case firebase.storage.TaskState.RUNNING: // or 'running'
+            console.log('Upload is running');
+            break;
+          }
+        }, function(error) {
+          // Handle unsuccessful uploads
+        }, function() {
+          // Handle successful uploads on complete
+          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+          uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+            console.log('File available at', downloadURL);
+            database.ref(reference).update({
+              image: downloadURL
+            });
+            document.location.href = '/viewInventory';
+          });
+        });
+      } else {
+        console.log("No image file, defaulting to template image.");
+        database.ref(reference).update({
+          image: downloadURL
+        });
+      }
+    } else {
+      console.log("No DB reference for img to refer to.")
+    }
+  }
 });
 </script>
-<!-- <script>
-$(document).ready(() => {
-  const database = firebase.database();
-
-  database.ref('users/').on('value', (snapshot) => {
-    const allUsers = snapshot.val();
-    console.log('users/ changed:', allUsers);
-    if (allUsers) {
-      $('#status').html(''); // clear the HTML
-      $('#status').append('List of users:');
-      Object.keys(allUsers).forEach((name) => {
-        $('#status').append('<li>' + name + ' ' + allUsers[name].job + ' ' + allUsers[name].pet + '</li>');
-      });
-    }
-  });
-
-
-  $('#resetButton').click(() => {
-    console.log('Resetting the database');
-    /* remember the fake JavaScript object database from PetsApp v1?
-    const fakeDatabase = {
-      'Philip': {job: 'professor', pet: 'cat.jpg'},
-      'John': {job: 'student',   pet: 'dog.jpg'},
-      'Carol': {job: 'engineer',  pet: 'bear.jpg'}
-    };
-    */
-    database.ref('users/').remove(); // delete the entire collection
-    database.ref('items/').remove();
-    // writes data to the database:
-    database.ref('users/Philip').set({job: 'professor', pet: 'cat.jpg'});
-    database.ref('users/John').set({job: 'student',   pet: 'dog.jpg'});
-    database.ref('users/Carol').set({job: 'engineer',  pet: 'bear.jpg'});
-  });
-  // use .on('value' to get notified in real-time whenever anyone
-  // on the internet updates your database. cool!
-  database.ref('items/').on('value', (snapshot) => {
-    const allUsers = snapshot.val();
-    console.log('users/ changed:', allUsers);
-    if (allUsers) {
-      $('#status').html(''); // clear the HTML
-      $('#status').append('List of users:');
-      Object.keys(allUsers).forEach((name) => {
-        $('#status').append('<li>' + name + ' ' + allUsers[name].number + ' ' + allUsers[name].unit + '</li>');
-      });
-    }
-  });
-
-  $('#insertButton').click(() => {
-    const name = $('#nameBox').val();
-    const units = $('#unitBox').val();
-
-    if( name == "" || units == "") {
-      console.log('no input')
-      return;
-    }
-    const dbLink = name+"-"+units;
-    const key = 'items/' + dbLink;
-    // 'once' reads the value once from the database
-    database.ref(key).once('value', (snapshot) => {
-      const data = snapshot.val();
-      console.log('You received some data!', data);
-      if (!data) {
-        // clear the display
-        database.ref('items/' + name+'-'+units).set({
-          number: $('#numBox').val(),
-          unit: $('#unitBox').val()
-        });
-        return;
-      }
-      if (data.number && data.unit) {
-        total = parseInt(data.number) + parseInt($('#numBox').val())
-        database.ref('items/' + name+'-'+units).set({
-          number: total,
-          unit: $('#unitBox').val()
-        });
-        return;
-      } else {
-        // clear the display
-        database.ref('items/' + name+'-'+units).set({
-          number: $('#numBox').val(),
-          unit: $('#unitBox').val()
-        });
-        return;
-      }
-    });
-  });
-
-});
-</script> -->

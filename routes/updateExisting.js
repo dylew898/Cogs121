@@ -4,7 +4,7 @@ var router = express.Router();
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('updateExisting', {
-    title: 'Update Existing Items'
+    title: 'Add Quantity to Existing Item'
   });
 });
 

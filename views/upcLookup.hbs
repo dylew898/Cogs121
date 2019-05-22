@@ -23,6 +23,11 @@
 
   <h1>Add Item - UPC Lookup</h1>
   <hr/>
+  <button id="resetButton">Reset database</button>
+  <br/>
+  <br/>
+  <br/>
+
   <div id="status"></div>
   
   <form>
@@ -43,6 +48,12 @@
     </div>
   </div>
 
+  <div class="form-group row">
+    <label for="locationBox" class="col-sm-2">Item Location</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" id="locationBox" required="required">
+    </div>
+  </div>
 
   <div class="form-group row">
     <label for="itemImg" class="col-sm-2">Item Image</label>
@@ -55,7 +66,7 @@
   <div class="form-group row">
     <label for="numBox" class="col-sm-2">Item Quantity</label>
     <div class="col-sm-4">
-      <input type="text" class="form-control" id="numBox" required="required">
+      <input type="number" class="form-control" id="numBox" required="required">
     </div>
   </div>
   <div class="form-group row">
@@ -71,11 +82,14 @@
     </div>
   </div>
 </form>
+<div id="status"></div>
 
 <script>
-
+var selectedFile;
 $(document).ready(() => {
   const database = firebase.database();
+  const storage = firebase.storage();
+
   $('#status').html(''); // clear the HTML
   $('#itemImg').hide();
   $('#upcLookupButton').click(() => {
@@ -119,7 +133,125 @@ $(document).ready(() => {
 
   $("#imgInput").change(function() {
     readURL(this);
+    selectedFile = event.target.files[0];
   });
 
+  database.ref('items/' ).on('value', (snapshot) => {
+    allItems = snapshot.val();
+    Object.keys(allItems).forEach((id) => {
+      console.log(id);
+      const typeDict = allItems[id]
+        Object.keys(typeDict).forEach((type) => {
+          if(type != "name"){
+            console.log("ID: "+ id+" Name: "+ typeDict[type].name + " Type: " + type + " Number: "+ typeDict[type].number)
+          }
+        });
+      });
+    });
+
+  $('#resetButton').click(() => {
+    console.log('Resetting the database');
+    /* remember the fake JavaScript object database from PetsApp v1?
+    const fakeDatabase = {
+      'Philip': {job: 'professor', pet: 'cat.jpg'},
+      'John': {job: 'student',   pet: 'dog.jpg'},
+      'Carol': {job: 'engineer',  pet: 'bear.jpg'}
+    };
+    */
+    database.ref('items/').remove();
+    alert("Firebase DB reset!");
+  });
+
+  $('#insertButton').click(() => {
+    const name = $('#nameBox').val();
+    const units = $('#unitBox').val();
+    const barCode = $('#barCodeBox').val();
+    const location = $('#locationBox').val();
+    if( name == "" || units == "" || barCode == "") {
+      console.log('no input')
+      return;
+    }
+    const dbLink = location + '/' +barCode + '/'+units;
+    const key = 'items/' + dbLink;
+    console.log(dbLink);
+    // 'once' reads the value once from the database
+    database.ref(key).once('value', (snapshot) => {
+      const data = snapshot.val();
+      console.log('You received some data!', data);
+
+      const directory = 'items/' + location +'/'+ barCode + '/'+ units + '/'
+      const imgURL = uploadImages(selectedFile, directory);
+      console.log(imgURL);
+      //if no data exists in db add new entry
+      if (!data) {
+        database.ref('items/' + location + '/' + barCode + '/'+units).set({
+          number: $('#numBox').val(),
+          unit: $('#unitBox').val(),
+          name: $('#nameBox').val(),
+          image: null,
+          barcode: barCode
+        });
+        database.ref('items/' + location + '/' + barCode ).update({
+          name: $('#nameBox').val()
+        });
+      }
+      else if (data.number) {
+        total = parseInt(data.number) + parseInt($('#numBox').val())
+        database.ref('items/' + location +'/'+ barCode + '/'+units).set({
+          number: total,
+          unit: $('#unitBox').val(),
+          name: $('#nameBox').val(),
+          image: null,
+          barcode: barCode
+        });
+      }
+      uploadImages(selectedFile, directory);
+    });
+  });
+
+  function uploadImages(file, reference) {
+    if (reference) {
+      if (file) {
+        var metadata = {
+          contentType: 'image/jpeg',
+        };
+        var storageRef = firebase.storage().ref(reference+ file.name);
+        var uploadTask = storageRef.put(file, metadata);
+        uploadTask.on('state_changed', function(snapshot){
+        // Observe state change events such as progress, pause, and resume
+        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log('Upload is ' + progress + '% done');
+        switch (snapshot.state) {
+          case firebase.storage.TaskState.PAUSED: // or 'paused'
+            console.log('Upload is paused');
+            break;
+          case firebase.storage.TaskState.RUNNING: // or 'running'
+            console.log('Upload is running');
+            break;
+          }
+        }, function(error) {
+          // Handle unsuccessful uploads
+        }, function() {
+          // Handle successful uploads on complete
+          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+          uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+            console.log('File available at', downloadURL);
+            database.ref(reference).update({
+              image: downloadURL
+            });
+          });
+          document.location.href = '/viewInventory';
+        });
+      } else {
+        console.log("No image file, defaulting to template image.");
+        database.ref(reference).update({
+          image: downloadURL
+        });
+      }
+    } else {
+      console.log("No DB reference for img to refer to.")
+    }
+  }
 });
 </script>

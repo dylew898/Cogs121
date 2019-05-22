@@ -24,55 +24,57 @@
 <h1>{{title}}</h1>
 <hr/>
 
-<div class="form-group row">
-  <label for="locationSelect" class="col-sm-2">Item Location</label>
-  <div class="col-4">
-    <select class="form-control" id="locationSelect">
-    <option value="">-- Select --</option>
-    </select>
-  </div>
-</div>
-
-<div class="form-group row">
-  <label for="nameSelect" class="col-sm-2">Item Name</label>
-  <div class="col-4">
-    <select class="form-control" id="nameSelect">
-    <option value="">-- Select --</option>
-    </select>
-  </div>
-</div>
-
-<div class="form-group row">
-  <label for="unitSelect" class="col-sm-2">Unit</label>
-  <div class="col-4">
-    <select class="form-control"  id="unitSelect">
-    <option value="">-- Select --</option>
-    </select>
-  </div>
-</div>
-
-<div class="form-group row">
-    <label for="nameSelect" class="col-sm-2">Item Barcode</label>
+<form>
+  <div class="form-group row">
+    <label for="locationSelect" class="col-sm-2">Item Location</label>
     <div class="col-4">
-    <input class="form-control" id="barCodeBox" type='text' size = '20' readonly/>
+      <select class="form-control" id="locationSelect">
+      <option value="">-- Select --</option>
+      </select>
+    </div>
   </div>
-</div>
 
-<div class="form-group row">
-    <label for="nameSelect" class="col-sm-2">Current Stock</label>
+  <div class="form-group row">
+    <label for="nameSelect" class="col-sm-2">Item Name</label>
     <div class="col-4">
-    <input class="form-control" id="numBox" type='text' size="20" required="required" readonly/>
+      <select class="form-control" id="nameSelect">
+      <option value="">-- Select --</option>
+      </select>
+    </div>
   </div>
-</div>
 
-<div class="form-group row">
-    <label for="nameSelect" class="col-sm-2">Add Amount</label>
+  <div class="form-group row">
+    <label for="unitSelect" class="col-sm-2">Unit</label>
     <div class="col-4">
-    <input class="form-control" id="checkNumBox" type='number' size="20" required="required" />
+      <select class="form-control"  id="unitSelect">
+      <option value="">-- Select --</option>
+      </select>
+    </div>
   </div>
-</div>
 
-<button type="button" class="btn btn-danger" id='checkoutButton'>Update Items</button>
+  <div class="form-group row">
+      <label for="nameSelect" class="col-sm-2">Item Barcode</label>
+      <div class="col-4">
+      <input class="form-control" id="barCodeBox" type='text' size = '20' readonly/>
+    </div>
+  </div>
+
+  <div class="form-group row">
+      <label for="nameSelect" class="col-sm-2">Current Stock</label>
+      <div class="col-4">
+      <input class="form-control" id="numBox" type='text' size="20" required="required" readonly/>
+    </div>
+  </div>
+
+  <div class="form-group row">
+      <label for="nameSelect" class="col-sm-2">Add Amount</label>
+      <div class="col-4">
+      <input class="form-control" id="checkNumBox" type='number' size="20" required="required" />
+    </div>
+  </div>
+</form>
+
+<button type="button" class="btn btn-success" id='checkoutButton'>Update Items</button>
 
 <!-- Remove status for final turn-in! -->
 <br/>
@@ -212,10 +214,8 @@ $('#checkoutButton').click(() => {
       if (data.unit) {
         console.log('hi');
         total = parseInt(data.number) + checkoutAmount;
-        database.ref('items/' +location+'/'+barCode + '/'+units).set({
+        database.ref('items/' +location+'/'+barCode + '/'+units).update({
           number: total,
-          unit: units,
-          name: name
         });
       } else {
         // clear the display
@@ -225,6 +225,7 @@ $('#checkoutButton').click(() => {
         return;
       }
     });
+    document.location.href = '/viewInventory';
   });
 });
 </script>
