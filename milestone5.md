@@ -1,1 +1,16 @@
 # Milestone 5
+
+### Target Demographic (Rubric 2)
+Jerry is a small business owner that needs a better way of keeping track is current item inventory. He has used other spreadsheet applications but has found that it was difficult to see how many items were available and to accurately view his new stock after adding or checking out items to the list. He soon discovered the application BackRoom! He decided to give it a try, since he had a new batch of inventory he needs to check in. He first looks up some items he currently has in stock, and finds that the application has a button that allows him to update what he currently has for specific items, simply by typing in the necessary information such as item name and stock amount. He also sees that he can do the same thing with adding new items as well as checking out items. When viewing his inventory, he sees all of his current stock in a much more cohesive manner, and lets him determine what stock he may or may not need for the next buy. He smiles happily as he is able to keep a better track of all of his items without having to read through multiple spreadsheets and potentially input in an incorrect item. Because he is able to view is current stock with much more accuracy, Jerry is motivated to continue to use BackRoom so that he doesn't over/under count what he currently has, resulting in money being saved when running his business and less waste generate from inaccurate counting. 
+
+### UI Skeleton and Writeup (Rubric 3 & 4)
+Our UI design includes a couple of new features, one of which is fixing the 'units' field when adding new items. Our previous iteration included a wheel menu that involved selecting what unit the user is using to measure, such as boxes, pallets, crates, etc. After some discussion, we decided to remove this feature and simply have a disabled field that autopopulates 'unit' for that space as it removes any possible ambiguity for the unit of measurement, as some people may view their units in different ways. We are also updating the view inventory field, so that instead of a long list of items all on one page, the user first selects a location first before being able to see the items that are within that location field. This is to incorporate the possibility of business owners having multiple stores and locations, and allows them to view all of the items that only pertain to that particular store. 
+
+### Data Display and Visualization Screenshots and Implementation (Rubric 5 & 6)
+
+### Data Display Beyond Current Implementation (Rubric 7)
+- graphs to track over time (particular item)
+- units and proper conversion calculator
+- maps api to location ur stuff
+- 'drag and drop' items (reduces need for forms)
+One ambitious data display and visualization implementation we would want to incorporate later would be graphs that track particular items over time. This would allow the user to see which particular items have been added or checked out, which helps business owners to determine which items are more popular and which are not being used as often, and allows for them better optimize their sources. Another implementation would be incorporating units and including a unit calculator. Our current issue with units is that business owners may have 
