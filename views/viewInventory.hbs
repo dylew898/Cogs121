@@ -24,11 +24,34 @@
 
 <h1>{{title}}</h1>
 <hr/>
-
+<div class="form-group row">
+  <label for="locationSelect" class="col-sm-2">Sort By Location</label>
+  <div class="col-4">
+    <select class="form-control" id="locationSelect">
+    <option value="All Locations">All Locations</option>
+    </select>
+  </div>
+</div>
 <div id="status"></div>
 <script>
 $(document).ready(() => {
+
+var x = document.getElementById("locationSelect");
+
 const database = firebase.database();
+
+database.ref('items/').on('value', (snapshot) => {
+  allItems = snapshot.val();
+  Object.keys(allItems).forEach((name) => {
+    var option = document.createElement("option");
+    option.text = name;
+    option.value = name;
+    x.add(option);
+
+  });
+});
+
+
     // use .on('value' to get notified in real-time whenever anyone
     // on the internet updates your database. cool!
     database.ref('items/').on('value', (snapshot) => {
@@ -52,8 +75,8 @@ const database = firebase.database();
                             const cardBlock = $('<div>', {class:"row no-gutters"});
                             const cardImageBlock = $('<div>', {class:"col-md-4"});
                             const cardImageStyle =  $('<img>', {
-                                                                    width:'100%', 
-                                                                    height:'100%', 
+                                                                    width:'100%',
+                                                                    height:'100%',
                                                                     src: itemRecord.image,
                                                                     class:"card-img",
                                                                     alt: itemBarcode
@@ -64,7 +87,7 @@ const database = firebase.database();
                             const cardItemAmount = $('<p>', {class:"card-text"}).append(itemQuantity + ' ' + itemType);
                             //const cardTimestamp = $('<p class="card-text"><small class="text-muted">Last updated X mins ago</small></p>');
                             const card = newCard.append(cardBlock.append(cardImageBlock.append(cardImageStyle)));
-                            
+
                             //cardBlock.append(cardTextBlock.append(cardTextBody.append(cardItemTitle, cardItemAmount, cardTimestamp)));
                             cardBlock.append(cardTextBlock.append(cardTextBody.append(cardItemTitle, cardItemAmount)));
                             $('#status').append(card);
@@ -76,6 +99,63 @@ const database = firebase.database();
             $('#status').append($('<p>').append("You have no items in your inventory."));
         }
     });
+});
+
+$('#locationSelect').on('change', function(e){
+  const database = firebase.database();
+
+  var yourSelect = document.getElementById("locationSelect");
+  var selectedName = yourSelect.options[yourSelect.selectedIndex].value;
+
+  database.ref('items/').on('value', (snapshot) => {
+  const allLocations = snapshot.val();
+  $('#status').html(''); // clear the HTML
+  if (allLocations) {
+      Object.keys(allLocations).forEach((location) => {
+        if(location == selectedName || selectedName == 'All Locations'){
+          const locationInventory = allLocations[location];
+          $('#status').append('<h3>'+location+'</h3>');
+          Object.keys(locationInventory).forEach((itemBarcode) => {
+              const item = locationInventory[itemBarcode];
+              Object.keys(item).forEach((itemUnit) => {
+                  if (itemUnit != "name") {
+                      const itemRecord = item[itemUnit];
+                      const itemBarcode = itemRecord.barcode;
+                      const itemName = itemRecord.name;
+                      const itemType = itemRecord.unit;
+                      const itemQuantity = itemRecord.number;
+                          console.log("Barcode ID: "+ itemBarcode +" Name: "+ itemName + " Unit: " + itemType + " Quantity: " + itemQuantity);
+                          const newCard = $('<a>', {href:'viewInventory/inventoryItem?id='+itemBarcode+'&type='+itemType+'&location='+location, class:"card mb-3", style:"max-width: 540px;"});
+                          const cardBlock = $('<div>', {class:"row no-gutters"});
+                          const cardImageBlock = $('<div>', {class:"col-md-4"});
+                          const cardImageStyle =  $('<img>', {
+                                                                  width:'100%',
+                                                                  height:'100%',
+                                                                  src: itemRecord.image,
+                                                                  class:"card-img",
+                                                                  alt: itemBarcode
+                                                              });
+                          const cardTextBlock = $('<div>', {class:"col-md-8"});
+                          const cardTextBody = $('<div>', {class:"card-body"});
+                          const cardItemTitle = $('<h5>', {class:"card-text"}).append(itemName);
+                          const cardItemAmount = $('<p>', {class:"card-text"}).append(itemQuantity + ' ' + itemType);
+                          //const cardTimestamp = $('<p class="card-text"><small class="text-muted">Last updated X mins ago</small></p>');
+                          const card = newCard.append(cardBlock.append(cardImageBlock.append(cardImageStyle)));
+
+                          //cardBlock.append(cardTextBlock.append(cardTextBody.append(cardItemTitle, cardItemAmount, cardTimestamp)));
+                          cardBlock.append(cardTextBlock.append(cardTextBody.append(cardItemTitle, cardItemAmount)));
+                          $('#status').append(card);
+                      }
+                  });
+              });
+            }
+          });
+      }  else {
+          $('#status').append($('<p>').append("You have no items in your inventory."));
+      }
+  });
+
+
 });
 
 </script>
