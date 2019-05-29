@@ -236,17 +236,16 @@ $(document).ready(() => {
           // Handle successful uploads on complete
           // For instance, get the download URL: https://firebasestorage.googleapis.com/...
           uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
-            console.log('File available at', downloadURL);
             database.ref(reference).update({
               image: downloadURL
             });
+            document.location.href = '/viewInventory';
           });
-          document.location.href = '/viewInventory';
         });
       } else {
         console.log("No image file, defaulting to template image.");
         database.ref(reference).update({
-          image: downloadURL
+          image: 'https://cdn3.iconfinder.com/data/icons/minicons-for-web-sites/24/minicons-95-512.png'
         });
       }
     } else {
