@@ -60,7 +60,7 @@ database.ref('items/').on('value', (snapshot) => {
     if (allLocations) {
         Object.keys(allLocations).forEach((location) => {
             const locationInventory = allLocations[location];
-            $('#status').append('<h3>'+location+'</h3>');
+            $('#status').append('<h3 class="location">'+location+'</h3>');
             Object.keys(locationInventory).forEach((itemBarcode) => {
                 const item = locationInventory[itemBarcode];
                 Object.keys(item).forEach((itemUnit) => {
@@ -84,12 +84,13 @@ database.ref('items/').on('value', (snapshot) => {
                             const cardTextBlock = $('<div>', {class:"col-md-8"});
                             const cardTextBody = $('<div>', {class:"card-body"});
                             const cardItemTitle = $('<h5>', {class:"card-text"}).append(itemName);
+                            const cardItemBarcode = $('<p>', {class:"card-text"}).append(itemBarcode);
                             const cardItemAmount = $('<p>', {class:"card-text"}).append(itemQuantity + ' ' + itemType);
                             //const cardTimestamp = $('<p class="card-text"><small class="text-muted">Last updated X mins ago</small></p>');
                             const card = newCard.append(cardBlock.append(cardImageBlock.append(cardImageStyle)));
 
                             //cardBlock.append(cardTextBlock.append(cardTextBody.append(cardItemTitle, cardItemAmount, cardTimestamp)));
-                            cardBlock.append(cardTextBlock.append(cardTextBody.append(cardItemTitle, cardItemAmount)));
+                            cardBlock.append(cardTextBlock.append(cardTextBody.append(cardItemTitle, cardItemAmount,cardItemBarcode)));
                             $('#status').append(card);
                         }
                     });
@@ -114,7 +115,7 @@ $('#locationSelect').on('change', function(e){
       Object.keys(allLocations).forEach((location) => {
         if(location == selectedName || selectedName == 'All Locations'){
           const locationInventory = allLocations[location];
-          $('#status').append('<h3>'+location+'</h3>');
+          $('#status').append('<h3 class="location">'+location+'</h3>');
           Object.keys(locationInventory).forEach((itemBarcode) => {
               const item = locationInventory[itemBarcode];
               Object.keys(item).forEach((itemUnit) => {
@@ -138,12 +139,13 @@ $('#locationSelect').on('change', function(e){
                           const cardTextBlock = $('<div>', {class:"col-md-8"});
                           const cardTextBody = $('<div>', {class:"card-body"});
                           const cardItemTitle = $('<h5>', {class:"card-text"}).append(itemName);
+                          const cardItemBarcode = $('<p>', {class:"card-text"}).append(itemBarcode);
                           const cardItemAmount = $('<p>', {class:"card-text"}).append(itemQuantity + ' ' + itemType);
                           //const cardTimestamp = $('<p class="card-text"><small class="text-muted">Last updated X mins ago</small></p>');
                           const card = newCard.append(cardBlock.append(cardImageBlock.append(cardImageStyle)));
 
                           //cardBlock.append(cardTextBlock.append(cardTextBody.append(cardItemTitle, cardItemAmount, cardTimestamp)));
-                          cardBlock.append(cardTextBlock.append(cardTextBody.append(cardItemTitle, cardItemAmount)));
+                          cardBlock.append(cardTextBlock.append(cardTextBody.append(cardItemTitle, cardItemAmount,cardItemBarcode)));
                           $('#status').append(card);
                       }
                   });
