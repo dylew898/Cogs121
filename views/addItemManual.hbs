@@ -211,7 +211,7 @@ $(document).ready(() => {
       } else {
         console.log("No image file, defaulting to template image.");
         database.ref(reference).update({
-          image: downloadURL
+          image: 'https://cdn3.iconfinder.com/data/icons/minicons-for-web-sites/24/minicons-95-512.png'
         });
       }
     } else {
