@@ -62,15 +62,10 @@
       <input type="number" class="form-control" id="numBox" required="required">
     </div>
   </div>
-  <div class="form-group row">
-    <div class="col-sm-4">
-      <input id="unitBox" hidden='True' class="form-control" type='text' value='unit' size = "20" required="required"/>
-    </div>
-  </div>
+
   <div class="form-group row">
     <div class="col-sm-12">
       <button type="button" class="btn btn-success" id='insertButton'>Add Item</button>
-      <div id="status"></div>
     </div>
   </div>
 </form>
@@ -128,15 +123,16 @@ $(document).ready(() => {
   });
 
   $('#insertButton').click(() => {
-    const name = $('#nameBox').val();
-    const units = $('#unitBox').val();
+    const itemName = $('#nameBox').val();
+    const itemNumber = $('#numBox').val()
+    const itemUnit = "unit";
     const barCode = $('#barCodeBox').val();
     const location = $('#locationBox').val();
-    if(name == "" || units == "" || barCode == "") {
+    if(itemName == "" || itemUnit == "" || barCode == "") {
       console.log('no input')
       return;
     }
-    const dbLink = location + '/' +barCode + '/'+units;
+    const dbLink = location + '/' +barCode + '/'+itemUnit;
     const key = 'items/' + dbLink;
     console.log(dbLink);
     // 'once' reads the value once from the database
@@ -144,28 +140,28 @@ $(document).ready(() => {
       const data = snapshot.val();
       console.log('You received some data!', data);
 
-      const directory = 'items/' + location +'/'+ barCode + '/'+ units + '/'
+      const directory = 'items/' + location +'/'+ barCode + '/'+ itemUnit + '/'
       const imgURL = uploadImages(selectedFile, directory);
       console.log(imgURL);
       //if no data exists in db add new entry
       if (!data) {
-        database.ref('items/' + location + '/' + barCode + '/'+units).set({
-          number: $('#numBox').val(),
-          unit: $('#unitBox').val(),
-          name: $('#nameBox').val(),
+        database.ref('items/' + location + '/' + barCode + '/'+itemUnit).set({
+          number: itemNumber,
+          unit: itemUnit,
+          name: itemName,
           image: null,
           barcode: barCode
         });
         database.ref('items/' + location + '/' + barCode ).update({
-          name: $('#nameBox').val()
+          name: itemName
         });
       }
       else if (data.number) {
-        total = parseInt(data.number) + parseInt($('#numBox').val())
-        database.ref('items/' + location +'/'+ barCode + '/'+units).set({
+        total = parseInt(data.number) + parseInt(itemNumber);
+        database.ref('items/' + location +'/'+ barCode + '/'+itemUnit).set({
           number: total,
-          unit: $('#unitBox').val(),
-          name: $('#nameBox').val(),
+          unit: itemUnit,
+          name: itemName,
           image: null,
           barcode: barCode
         });
@@ -213,6 +209,7 @@ $(document).ready(() => {
         database.ref(reference).update({
           image: 'https://cdn3.iconfinder.com/data/icons/minicons-for-web-sites/24/minicons-95-512.png'
         });
+        document.location.href = '/viewInventory';
       }
     } else {
       console.log("No DB reference for img to refer to.")

@@ -13,4 +13,11 @@ p {
 form {
   max-width: 1000px; }
 
+#upcLookupButton {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0; }
+  #upcLookupButton:hover {
+    background-color: #343A40;
+    color: white; }
+
 /*# sourceMappingURL=style.css.map */
