@@ -43,14 +43,14 @@
     </div>
   </div>
 
-  <div class="form-group row">
+  <!-- <div class="form-group row">
     <label for="unitSelect" class="col-sm-2">Unit</label>
     <div class="col-4">
       <select class="form-control"  id="unitSelect">
       <option value="">-- Select --</option>
       </select>
     </div>
-  </div>
+  </div> -->
 
   <div class="form-group row">
       <label for="nameSelect" class="col-sm-2">Item Barcode</label>
@@ -146,31 +146,23 @@ $('#nameSelect').on('change', function(e){
   var selectedName = yourSelect.options[yourSelect.selectedIndex].value;
   var locationSelect = document.getElementById("locationSelect");
   var location = locationSelect.options[locationSelect.selectedIndex].value;
-  database.ref('items/' + location+'/'+selectedName).on('value', (snapshot) => {
-    var select = document.getElementById("unitSelect");
-    document.getElementById('unitSelect').innerHTML = "";
-    allItems = snapshot.val();
-
-    var option = document.createElement("option");
-    option.text = '--Select--';
-    select.add(option);
-    Object.keys(allItems).forEach((name) => {
-      if (name != 'name') {
-        var option = document.createElement("option");
-        option.text = name;
-        select.add(option);
-      }
-    });
-  });
-});
-
-$('#unitSelect').on('change', function(e){
-  var yourSelect = document.getElementById("nameSelect");
-  var selectedName = yourSelect.options[yourSelect.selectedIndex].value;
-  var locationSelect = document.getElementById("locationSelect");
-  var location = locationSelect.options[locationSelect.selectedIndex].value;
-  var unitSelect = document.getElementById("unitSelect");
-  var selectedUnit = unitSelect.options[unitSelect.selectedIndex].value;
+  // database.ref('items/' + location+'/'+selectedName).on('value', (snapshot) => {
+  //   var select = document.getElementById("unitSelect");
+  //   document.getElementById('unitSelect').innerHTML = "";
+  //   allItems = snapshot.val();
+  //
+  //   var option = document.createElement("option");
+  //   option.text = '--Select--';
+  //   select.add(option);
+  //   Object.keys(allItems).forEach((name) => {
+  //     if (name != 'name') {
+  //       var option = document.createElement("option");
+  //       option.text = name;
+  //       select.add(option);
+  //     }
+  //   });
+  // });
+  selectedUnit = 'unit'
   database.ref('items/' + location+'/'+selectedName+ '/' + selectedUnit).on('value', (snapshot) => {
     var vals = snapshot.val();
     $('#barCodeBox').val(selectedName);
@@ -179,13 +171,27 @@ $('#unitSelect').on('change', function(e){
   });
 });
 
+// $('#unitSelect').on('change', function(e){
+//   var yourSelect = document.getElementById("nameSelect");
+//   var selectedName = yourSelect.options[yourSelect.selectedIndex].value;
+//   var locationSelect = document.getElementById("locationSelect");
+//   var location = locationSelect.options[locationSelect.selectedIndex].value;
+//   var unitSelect = document.getElementById("unitSelect");
+//   var selectedUnit = unitSelect.options[unitSelect.selectedIndex].value;
+//   database.ref('items/' + location+'/'+selectedName+ '/' + selectedUnit).on('value', (snapshot) => {
+//     var vals = snapshot.val();
+//     $('#barCodeBox').val(selectedName);
+//     $('#numBox').val(vals.number);
+//     console.log(selectedName)
+//   });
+// });
+
 
 $('#checkoutButton').click(() => {
   const yourSelect = document.getElementById("nameSelect");
   const name = yourSelect.options[yourSelect.selectedIndex].text;
 
-  const unitSelect = document.getElementById("unitSelect");
-  const units = unitSelect.options[unitSelect.selectedIndex].value;
+  const units = 'unit'
 
   var locationSelect = document.getElementById("locationSelect");
   var location = locationSelect.options[locationSelect.selectedIndex].value;
