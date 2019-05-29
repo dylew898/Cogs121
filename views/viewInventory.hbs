@@ -28,7 +28,7 @@
   <label for="locationSelect" class="col-sm-2">Sort By Location</label>
   <div class="col-4">
     <select class="form-control" id="locationSelect">
-    <option value="">-- Select --</option>
+    <option value="All Locations">All Locations</option>
     </select>
   </div>
 </div>
@@ -112,7 +112,7 @@ $('#locationSelect').on('change', function(e){
   $('#status').html(''); // clear the HTML
   if (allLocations) {
       Object.keys(allLocations).forEach((location) => {
-        if(location == selectedName){
+        if(location == selectedName || selectedName == 'All Locations'){
           const locationInventory = allLocations[location];
           $('#status').append('<h3>'+location+'</h3>');
           Object.keys(locationInventory).forEach((itemBarcode) => {
