@@ -49,4 +49,13 @@ form {
     position-padding: 10px;
     position-font-size: 20px; }
 
+.card-text {
+  color: Black; }
+
+.card {
+  float: left; }
+
+.location {
+  clear: both; }
+
 /*# sourceMappingURL=style.css.map */
