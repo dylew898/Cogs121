@@ -42,14 +42,12 @@
     </div>
   </div>
 
-  <!-- <div class="form-group row">
-    <label for="unitSelect" class="col-sm-2">Unit</label>
-    <div class="col-4">
-      <select class="form-control"  id="unitSelect">
-      <option value="">-- Select --</option>
-      </select>
+  <div class="form-group row">
+    <label for="itemImg" class="col-sm-2">Item Image</label>
+    <div class="col-sm-4">
+      <img style="max-width: 300px; max-height: 300px;" id="itemImg" src="#" alt="Image."/>
     </div>
-  </div> -->
+  </div>
 
   <div class="form-group row">
       <label for="nameSelect" class="col-sm-2">Item Barcode</label>
@@ -84,22 +82,6 @@
 <script>
 $(document).ready(() => {
 const database = firebase.database();
-
-database.ref('items/' ).on('value', (snapshot) => {
-    allItems = snapshot.val();
-    Object.keys(allItems).forEach((id) => {
-      console.log(id);
-      const typeDict = allItems[id]
-      $('#status').html('');
-      $('#status').append('Data from Firebase:')
-      Object.keys(typeDict).forEach((type) => {
-        if(type != "name"){
-          console.log("Barcode ID: "+ id+" Name: "+ typeDict[type].name + " Type: " + type + " Number: "+ typeDict[type].number);
-          $('#status').append($('<li>').append("Barcode: "+ id+" Name: "+ typeDict[type].name + " Type: " + type + " Number: "+ typeDict[type].number));
-        }
-      });
-    });
-  });
 
 var x = document.getElementById("locationSelect");
 
@@ -144,64 +126,33 @@ $('#nameSelect').on('change', function(e){
   var selectedName = yourSelect.options[yourSelect.selectedIndex].value;
   var locationSelect = document.getElementById("locationSelect");
   var location = locationSelect.options[locationSelect.selectedIndex].value;
-  // database.ref('items/' + location+'/'+selectedName).on('value', (snapshot) => {
-  //   var select = document.getElementById("unitSelect");
-  //   document.getElementById('unitSelect').innerHTML = "";
-  //   allItems = snapshot.val();
-  //
-  //   var option = document.createElement("option");
-  //   option.text = '--Select--';
-  //   select.add(option);
-  //   Object.keys(allItems).forEach((name) => {
-  //     if (name != 'name') {
-  //       var option = document.createElement("option");
-  //       option.text = name;
-  //       select.add(option);
-  //     }
-  //   });
-  // });
-  selectedUnit = 'unit'
+  var selectedUnit = 'unit';
   database.ref('items/' + location+'/'+selectedName+ '/' + selectedUnit).on('value', (snapshot) => {
     var vals = snapshot.val();
     $('#barCodeBox').val(selectedName);
     $('#numBox').val(vals.number);
-    console.log(selectedName)
+    $('#itemImg').attr("src", vals.image);
+    console.log(selectedName);
   });
 });
-
-// $('#unitSelect').on('change', function(e){
-//   var yourSelect = document.getElementById("nameSelect");
-//   var selectedName = yourSelect.options[yourSelect.selectedIndex].value;
-//   var locationSelect = document.getElementById("locationSelect");
-//   var location = locationSelect.options[locationSelect.selectedIndex].value;
-//   var unitSelect = document.getElementById("unitSelect");
-//   var selectedUnit = unitSelect.options[unitSelect.selectedIndex].value;
-//   database.ref('items/' + location+'/'+selectedName+ '/' + selectedUnit).on('value', (snapshot) => {
-//     var vals = snapshot.val();
-//     $('#barCodeBox').val(selectedName);
-//     $('#numBox').val(vals.number);
-//     console.log(selectedName)
-//   });
-// });
-
 
 $('#checkoutButton').click(() => {
   const yourSelect = document.getElementById("nameSelect");
   const name = yourSelect.options[yourSelect.selectedIndex].text;
 
-  const units = 'unit'
+  const units = 'unit';
 
   var locationSelect = document.getElementById("locationSelect");
   var location = locationSelect.options[locationSelect.selectedIndex].value;
 
   const barCode = $('#barCodeBox').val();
   if( name == "" || units == "" || $('#checkNumBox').val()=='') {
-    console.log('no input')
+    console.log('no input');
     return;
   }
   const dbLink = location+'/'+barCode + '/'+units;
   const key = 'items/' + dbLink;
-  console.log(key)
+  console.log(key);
   // 'once' reads the value once from the database
   database.ref(key).once('value', (snapshot) => {
     const data = snapshot.val();
@@ -215,10 +166,8 @@ $('#checkoutButton').click(() => {
       const checkoutAmount = parseInt($('#checkNumBox').val());
       if (data.number >= checkoutAmount) {
         total = parseInt(data.number) - checkoutAmount;
-        database.ref('items/' +location+'/'+barCode + '/'+units).set({
-          number: total,
-          unit: units,
-          name: name
+        database.ref('items/' +location+'/'+barCode + '/'+units).update({
+          number: total
         });
       } else {
         // clear the display
