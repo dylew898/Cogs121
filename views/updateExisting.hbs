@@ -43,14 +43,12 @@
     </div>
   </div>
 
-  <!-- <div class="form-group row">
-    <label for="unitSelect" class="col-sm-2">Unit</label>
-    <div class="col-4">
-      <select class="form-control"  id="unitSelect">
-      <option value="">-- Select --</option>
-      </select>
+  <div class="form-group row">
+    <label for="itemImg" class="col-sm-2">Item Image</label>
+    <div class="col-sm-4">
+      <img style="max-width: 300px; max-height: 300px;" id="itemImg" src="#" alt="Image."/>
     </div>
-  </div> -->
+  </div>
 
   <div class="form-group row">
       <label for="nameSelect" class="col-sm-2">Item Barcode</label>
@@ -87,7 +85,7 @@
 $(document).ready(() => {
 const database = firebase.database();
 
-database.ref('items/' ).on('value', (snapshot) => {
+/*database.ref('items/' ).on('value', (snapshot) => {
     allItems = snapshot.val();
     Object.keys(allItems).forEach((id) => {
       console.log(id);
@@ -102,6 +100,7 @@ database.ref('items/' ).on('value', (snapshot) => {
       });
     });
   });
+*/
 
 var x = document.getElementById("locationSelect");
 
@@ -167,6 +166,7 @@ $('#nameSelect').on('change', function(e){
     var vals = snapshot.val();
     $('#barCodeBox').val(selectedName);
     $('#numBox').val(vals.number);
+    $('#itemImg').attr("src", vals.image);
     console.log(selectedName)
   });
 });

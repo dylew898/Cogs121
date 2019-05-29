@@ -172,6 +172,7 @@ $('#checkoutButton').click(() => {
         database.ref('items/' +location+'/'+barCode + '/'+units).update({
           number: total
         });
+        document.location.href = '/viewInventory';
       } else {
         // clear the display
         console.log("error");
