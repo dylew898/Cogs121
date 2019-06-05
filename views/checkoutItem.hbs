@@ -86,6 +86,12 @@ database.ref('items/').on('value', (snapshot) => {
 $('#locationSelect').on('change', function(e){
   var yourSelect = document.getElementById("locationSelect");
   var selectedName = yourSelect.options[yourSelect.selectedIndex].value;
+  if (selectedName == ''){
+    var select = document.getElementById("nameSelect");
+    document.getElementById('nameSelect').innerHTML = "";
+    option.text = '--Select--';
+    select.add(option);
+  }
   database.ref('items/' + selectedName).on('value', (snapshot) => {
     var select = document.getElementById("nameSelect");
     document.getElementById('nameSelect').innerHTML = "";

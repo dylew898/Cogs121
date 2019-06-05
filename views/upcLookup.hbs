@@ -1,8 +1,8 @@
-<!-- 
+<!--
 This is the UPC lookup page. Users have the ability to add new items by typing in the item's UPC barcode
-into the barcode text field. Searching the barcode will autopopulate the item's name pulling it from the 
+into the barcode text field. Searching the barcode will autopopulate the item's name pulling it from the
 UPC item database. The user would then enter in a location for their item to be sorted in for organizational
-purposes, as well as enter in the quantity of that item as well as have the ability to upload an image for 
+purposes, as well as enter in the quantity of that item as well as have the ability to upload an image for
 that item.
 -->
 
@@ -218,11 +218,7 @@ $(document).ready(() => {
     });
   });
 
-<<<<<<< HEAD
-//used to upload the image that the user inputs to the database
-=======
   //This function allows the user to upload an image for the item they are adding to their inventory.
->>>>>>> 47e29afafd3260f5e5c8cd649f47b4f3636dcab6
   function uploadImages(file, reference) {
     if (reference) {
       if (file) {
@@ -238,7 +234,7 @@ $(document).ready(() => {
         console.log('Upload is ' + progress + '% done');
         switch (snapshot.state) {
           case firebase.storage.TaskState.PAUSED: // or 'paused'
-            console.log('Upload is paused');
+            console.log('Upload is paused');x
             break;
           case firebase.storage.TaskState.RUNNING: // or 'running'
             console.log('Upload is running');
