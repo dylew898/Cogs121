@@ -1,6 +1,4 @@
 <h1>{{title}}</h1>
-
-<button id="resetButton">Reset database</button>
 <hr/>
 
 <form>
@@ -85,19 +83,6 @@ $(document).ready(() => {
         });
       });
     });
-
-  $('#resetButton').click(() => {
-    console.log('Resetting the database');
-    /* remember the fake JavaScript object database from PetsApp v1?
-    const fakeDatabase = {
-      'Philip': {job: 'professor', pet: 'cat.jpg'},
-      'John': {job: 'student',   pet: 'dog.jpg'},
-      'Carol': {job: 'engineer',  pet: 'bear.jpg'}
-    };
-    */
-    database.ref('items/').remove();
-    alert("Firebase DB reset!");
-  });
 
   $('#insertButton').click(() => {
     const itemName = $('#nameBox').val();
