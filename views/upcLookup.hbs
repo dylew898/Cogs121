@@ -89,6 +89,11 @@ $(document).ready(() => {
               $.each(data.body.items, (index, element) => {
                 $('#nameBox').val(element.title.slice(0, 32));
                 $('#barCodeBox').val(element.upc);
+                if (element.images[0]) {
+                  $('#itemImg').attr('src', element.images[0]);
+                  $('#itemImg').show();
+                  selectedFile = element.images[0];
+                }
               });
               break;
             case 400:
@@ -133,11 +138,7 @@ $(document).ready(() => {
     // 'once' reads the value once from the database
     database.ref(key).once('value', (snapshot) => {
       const data = snapshot.val();
-      console.log('You received some data!', data);
-
       const directory = 'items/' + location +'/'+ barCode + '/'+ itemUnit + '/'
-      const imgURL = uploadImages(selectedFile, directory);
-      console.log(imgURL);
       //if no data exists in db add new entry
       if (!data) {
         if(parseInt(itemNumber) > 0){
@@ -151,7 +152,6 @@ $(document).ready(() => {
           database.ref('items/' + location + '/' + barCode ).update({
             name: itemName
           });
-          uploadImages(selectedFile, directory);
         }
         else {
           console.log("error");
@@ -181,8 +181,11 @@ $(document).ready(() => {
 
   //This function allows the user to upload an image for the item they are adding to their inventory.
   function uploadImages(file, reference) {
+    //sanity check for item being created
     if (reference) {
-      if (file) {
+      // if we are using user-uploaded file
+      const fileType = typeof(file);
+      if (fileType === 'object') {
         var metadata = {
           contentType: 'image/jpeg',
         };
@@ -213,6 +216,13 @@ $(document).ready(() => {
             document.location.href = '/viewInventory';
           });
         });
+        //if we are using API image, set image attr to image URL instead of uploading user file
+      } else if (fileType === 'string') {
+        database.ref(reference).update({
+          image: file
+        });
+        document.location.href = '/viewInventory';
+        // if no image was received from API and no user image upload, use a template image
       } else {
         console.log("No image file, defaulting to template image.");
         database.ref(reference).update({
@@ -221,8 +231,9 @@ $(document).ready(() => {
         document.location.href = '/viewInventory';
       }
     } else {
-      console.log("No DB reference for img to refer to.")
+      alert("No DB reference for img to refer to, please consult your nearest codemonkey.");
     }
+    return;
   }
 });
 </script>
