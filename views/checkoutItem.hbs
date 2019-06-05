@@ -7,7 +7,6 @@ submit button updates the item information in the firebase database.  -->
 <hr/>
 
 <form class="itemform">
-  <div class=>
     <div class="form-group row">
       <label for="locationSelect" class="col-sm-2">Item Location</label>
       <div class="col-4">
@@ -29,22 +28,23 @@ submit button updates the item information in the firebase database.  -->
     <div class="form-group row">
       <label for="itemImg" class="col-sm-2">Item Image</label>
       <div class="col-sm-4">
-        <img style="max-width: 300px; max-height: 300px;" id="itemImg" src="#" alt="Image."/>
+        <img style="max-width: 300px; max-height: 300px;" id="itemImg" src="#" alt="Item Image"/>
+        <span id="image-placeholder-text">Please select an item.</span>
       </div>
     </div>
 
     <div class="form-group row">
         <label for="nameSelect" class="col-sm-2">Item Barcode</label>
         <div class="col-4">
-        <input class="form-control" id="barCodeBox" type='text' size = '20' readonly/>
-      </div>
+          <input class="form-control" id="barCodeBox" type='text' size = '20' readonly/>
+        </div>
     </div>
 
     <div class="form-group row">
         <label for="nameSelect" class="col-sm-2">Current Stock</label>
         <div class="col-4">
-        <input class="form-control" id="numBox" type='text' size="20" required="required" readonly/>
-      </div>
+          <input class="form-control" id="numBox" type='text' size="20" required="required" readonly/>
+        </div>
     </div>
 
     <div class="form-group row">
@@ -55,7 +55,6 @@ submit button updates the item information in the firebase database.  -->
     </div>
 
     <button type="button" class="btn btn-danger" id='checkoutButton'>Checkout Items</button>
-  </div>
 </form>
 <!-- Remove status for final turn-in! -->
 <br/>
@@ -66,8 +65,10 @@ submit button updates the item information in the firebase database.  -->
 
 <script>
 $(document).ready(() => {
-const database = firebase.database();
 
+// hide image since no item is selected yet
+$('#itemImg').hide();
+const database = firebase.database();
 var x = document.getElementById("locationSelect");
 
 
@@ -102,7 +103,6 @@ $('#locationSelect').on('change', function(e){
     select.add(option);
     Object.keys(allItems).forEach((name) => {
       var option = document.createElement("option");
-
       option.text = allItems[name].name;
       option.value = name;
       select.add(option);
@@ -122,6 +122,8 @@ $('#nameSelect').on('change', function(e){
     $('#barCodeBox').val(selectedName);
     $('#numBox').val(vals.number);
     $('#itemImg').attr("src", vals.image);
+    $('#itemImg').show();
+    $('#image-placeholder-text').hide();
     console.log(selectedName);
   });
 });
@@ -156,19 +158,22 @@ $('#checkoutButton').click(() => {
     }
     if (data.number && data.unit) {
       const checkoutAmount = parseInt($('#checkNumBox').val());
-      if (data.number >= checkoutAmount) {
-        total = parseInt(data.number) - checkoutAmount;
-        database.ref('items/' +location+'/'+barCode + '/'+units).update({
-          number: total
-        });
-        document.location.href = '/viewInventory';
+      if (checkoutAmount > 0) {
+        if (data.number >= checkoutAmount) {
+          total = parseInt(data.number) - checkoutAmount;
+          database.ref('items/' +location+'/'+barCode + '/'+units).update({
+            number: total
+          });
+          document.location.href = '/viewInventory';
+        } else {
+          // clear the display
+          console.log("error");
+          alert("ERROR: Checkout amount is greater than available.");
+        }
       } else {
-        // clear the display
-        console.log("error");
-        alert("ERROR: Checkout amount is greater than available!")
+        alert("ERROR: Enter a value greater than 0.");
       }
-        return;
-      }
+    }
     });
   });
 });

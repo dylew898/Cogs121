@@ -29,7 +29,8 @@ submit button updates the item information in the firebase database.  -->
   <div class="form-group row">
     <label for="itemImg" class="col-sm-2">Item Image</label>
     <div class="col-sm-4">
-      <img style="max-width: 300px; max-height: 300px;" id="itemImg" src="#" alt="Image."/>
+      <img style="max-width: 300px; max-height: 300px;" id="itemImg" src="#" alt="Item Image"/>
+      <span id="image-placeholder-text">Please select an item.</span>
     </div>
   </div>
 
@@ -66,6 +67,7 @@ submit button updates the item information in the firebase database.  -->
 
 <script>
 $(document).ready(() => {
+$('#itemImg').hide();
 //populate the first select box upon the page being loaded in
 const database = firebase.database();
 
@@ -79,7 +81,6 @@ database.ref('items/').on('value', (snapshot) => {
     option.text = name;
     option.value = name;
     x.add(option);
-
   });
 });
 
@@ -103,7 +104,6 @@ $('#locationSelect').on('change', function(e){
     select.add(option);
     Object.keys(allItems).forEach((name) => {
       var option = document.createElement("option");
-
       option.text = allItems[name].name;
       option.value = name;
       select.add(option);
@@ -124,6 +124,8 @@ $('#nameSelect').on('change', function(e){
     $('#barCodeBox').val(selectedName);
     $('#numBox').val(vals.number);
     $('#itemImg').attr("src", vals.image);
+    $('#itemImg').show();
+    $('#image-placeholder-text').hide();
     console.log(selectedName)
   });
 });

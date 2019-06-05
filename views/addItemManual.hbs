@@ -108,6 +108,23 @@ $(document).ready(() => {
       console.log('You received some data!', data);
 
       const directory = 'items/' + location +'/'+ barCode + '/'+ itemUnit + '/'
+<<<<<<< HEAD
+      //const imgURL = uploadImages(selectedFile, directory);
+      //console.log(imgURL);
+      //if no data exists in db add new entry
+      if (!data) {
+        database.ref('items/' + location + '/' + barCode + '/'+itemUnit).set({
+          number: itemNumber,
+          unit: itemUnit,
+          name: itemName,
+          image: null,
+          barcode: barCode
+        });
+        database.ref('items/' + location + '/' + barCode ).update({
+          name: itemName
+        });
+        uploadImages(selectedFile, directory);
+=======
       //if no data exists in db add new entry
       if (!data) {
         if(parseInt(itemNumber) > 0){
@@ -127,6 +144,7 @@ $(document).ready(() => {
           console.log("error");
           alert("ERROR: Add amount is Negative!")
         }
+>>>>>>> 78efe39ff607f1aae0feed618f5b8e55ca5b32b8
       }
       else if (data.number) {
         console.log('2222')

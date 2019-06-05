@@ -114,7 +114,7 @@ $(document).ready(() => {
           switch (data.statusCode) {
             case 200:
               $.each(data.body.items, (index, element) => {
-                $('#nameBox').val(element.title);
+                $('#nameBox').val(element.title.slice(0, 32));
                 $('#barCodeBox').val(element.upc);
               });
               break;
@@ -144,6 +144,8 @@ $(document).ready(() => {
     selectedFile = event.target.files[0];
   });
 
+<<<<<<< HEAD
+=======
   database.ref('items/' ).on('value', (snapshot) => {
     allItems = snapshot.val();
     Object.keys(allItems).forEach((id) => {
@@ -170,6 +172,7 @@ $(document).ready(() => {
     alert("Firebase DB reset!");
   });
 //reads the  values in the inputs and adds the item to the database
+>>>>>>> 78efe39ff607f1aae0feed618f5b8e55ca5b32b8
  $('#insertButton').click(() => {
     const itemName = $('#nameBox').val();
     const itemNumber = $('#numBox').val()
