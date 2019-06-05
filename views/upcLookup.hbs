@@ -6,39 +6,12 @@ purposes, as well as enter in the quantity of that item as well as have the abil
 that item.
 -->
 
-<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-    <a class="navbar-brand" href="http://localhost:3000/">BackRoom</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarCollapse">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-            <a class="nav-link" href="/viewInventory">View Inventory</a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link" href="/addItem">Add Item</a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link" href="/checkoutItem">Checkout Item</a>
-            </li>
-        </ul>
-        <div class="mt-2 mt-md-0">
-            <a href="/login" class="btn btn-outline-success my-2 my-sm-0" type="submit">Sign Out</a>
-        </div>
-    </div>
-</nav>
+<h1>Add Item - UPC Lookup</h1>
+<hr/>
 
-  <h1>Add Item - UPC Lookup</h1>
-  <hr/>
-  <button id="resetButton">Reset database</button>
-  <br/>
-  <br/>
-  <br/>
+<div id="status"></div>
 
-  <div id="status"></div>
-
-  <form>
+<form>
   <div class="form-group row">
     <label for="barCode" class="col-sm-2">Item Barcode</label>
     <div class="col-sm-4 input-group">
@@ -157,6 +130,8 @@ $(document).ready(() => {
       });
     });
 
+<<<<<<< HEAD
+=======
   $('#resetButton').click(() => {
     console.log('Resetting the database');
     /* remember the fake JavaScript object database from PetsApp v1?
@@ -170,6 +145,7 @@ $(document).ready(() => {
     alert("Firebase DB reset!");
   });
 //reads the  values in the inputs and adds the item to the database
+>>>>>>> 0664a33e9a51fd932c5dd9dc9c081e064926b129
  $('#insertButton').click(() => {
     const itemName = $('#nameBox').val();
     const itemNumber = $('#numBox').val()

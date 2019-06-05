@@ -2,8 +2,6 @@
 multiple input boxes that they can fill out, such as bar code, quantity and an
 image. The submite button updates the firebase database. -->
 <h1>{{title}}</h1>
-
-<button id="resetButton">Reset database</button>
 <hr/>
 
 <form>
@@ -91,21 +89,6 @@ $(document).ready(() => {
       });
     });
 
-  $('#resetButton').click(() => {
-    console.log('Resetting the database');
-    /* remember the fake JavaScript object database from PetsApp v1?
-    const fakeDatabase = {
-      'Philip': {job: 'professor', pet: 'cat.jpg'},
-      'John': {job: 'student',   pet: 'dog.jpg'},
-      'Carol': {job: 'engineer',  pet: 'bear.jpg'}
-    };
-    */
-    database.ref('items/').remove();
-    alert("Firebase DB reset!");
-  });
-
-  //reads all of the values from the text boxes and adds the new item to the
-  //firebase database
   $('#insertButton').click(() => {
     const itemName = $('#nameBox').val();
     const itemNumber = $('#numBox').val()

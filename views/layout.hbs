@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <base href="http://localhost:3000/">
     <title>{{title}}</title>
     
     <script src="https://www.gstatic.com/firebasejs/5.10.1/firebase.js"></script>
@@ -27,28 +28,49 @@
   </head>
 
   <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-    <a class="navbar-brand" href="http://localhost:3000/">BackRoom</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-    </button>
+    <a class="navbar-brand ml-3" href="http://localhost:3000/">BackRoom</a>
     <div class="collapse navbar-collapse" id="navbarCollapse">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
+      <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
             <a class="nav-link" href="/viewInventory">View Inventory</a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link" href="/addItem">Add Item</a>
-            </li>
-            <li class="nav-item">
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="modal" data-target="#exampleModalCenter" style="cursor: pointer">
+             Add Item
+            </a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="/checkoutItem">Checkout Item</a>
-            </li>
-        </ul>
+          </li>
+      </ul>
         <div class="mt-2 mt-md-0">
-            <a href="/login" class="btn btn-outline-success my-2 my-sm-0" type="submit">Sign Out</a>
+            <button href="/login" class="btn btn-light btn-outline-danger mr-3">Sign Out</button>
         </div>
     </div>
   </nav>
-  
+
+  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title font-weight-bold" id="exampleModalCenterTitle">Add Item Options</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h5 class="mb-3">New Items</h5>
+          <a href='addItem/manualEntry' class="btn btn-primary btn-lg">Manual Item Entry</a>
+          <span class="ml-2 mr-2">or</span>
+          <a href='addItem/upcLookup' class="btn btn-primary btn-lg">UPC Item Lookup</a>
+          <hr/>
+          <h5 class="mb-3">Update Existing Items</h5>
+          <a href='addItem/updateExisting' class="btn btn-primary btn-lg">Add Quantity to Existing Items</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <body>
     {{{body}}}
   </body>

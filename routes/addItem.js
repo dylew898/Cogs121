@@ -11,24 +11,7 @@ const opts = {
   }
 }
 
-var req = https.request(opts, function(res) {
-  console.log('statusCode: ', res.statusCode);
-  console.log('headers: ', res.headers);
-  res.on('data', function(d) {
-    console.log('BODY: ' + d);
-  })
-})
-req.on('error', function(e) {
-  console.log('problem with request: ' + e.message);
-})
-req.write('{ "upc": "4002293401102" }')
-req.end()
-
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.render('addItemOptions', {title: "Add Item"});
-});
-
 router.get('/upcLookup', (req, res) => {
   res.render('upcLookup', {title: "Add Item - UPC Lookup"});
 });
