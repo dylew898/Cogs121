@@ -66,114 +66,117 @@ submit button updates the item information in the firebase database.  -->
 <script>
 $(document).ready(() => {
 
-// hide image since no item is selected yet
-$('#itemImg').hide();
-const database = firebase.database();
-var x = document.getElementById("locationSelect");
+  // hide image since no item is selected yet
+  $('#itemImg').hide();
+  const database = firebase.database();
+  var x = document.getElementById("locationSelect");
 
-
-database.ref('items/').on('value', (snapshot) => {
-  allItems = snapshot.val();
-  Object.keys(allItems).forEach((name) => {
-    var option = document.createElement("option");
-    option.text = name;
-    option.value = name;
-    x.add(option);
-
-  });
-});
-
-//auto populating based on what location was selected for the following box
-$('#locationSelect').on('change', function(e){
-  var yourSelect = document.getElementById("locationSelect");
-  var selectedName = yourSelect.options[yourSelect.selectedIndex].value;
-  if (selectedName == ''){
-    var select = document.getElementById("nameSelect");
-    document.getElementById('nameSelect').innerHTML = "";
-    option.text = '--Select--';
-    select.add(option);
-  }
-  database.ref('items/' + selectedName).on('value', (snapshot) => {
-    var select = document.getElementById("nameSelect");
-    document.getElementById('nameSelect').innerHTML = "";
+  database.ref('items/').on('value', (snapshot) => {
     allItems = snapshot.val();
-
-    var option = document.createElement("option");
-    option.text = '--Select--';
-    select.add(option);
     Object.keys(allItems).forEach((name) => {
       var option = document.createElement("option");
-      option.text = allItems[name].name;
+      option.text = name;
       option.value = name;
-      select.add(option);
+      x.add(option);
+
     });
   });
-});
+
+//auto populating based on what location was selected for the following box
+  $('#locationSelect').on('change', function(e){
+    var yourSelect = document.getElementById("locationSelect");
+    var selectedName = yourSelect.options[yourSelect.selectedIndex].value;
+    if (selectedName == ''){
+      var select = document.getElementById("nameSelect");
+      document.getElementById('nameSelect').innerHTML = "";
+      option.text = '--Select--';
+      select.add(option);
+    }
+    database.ref('items/' + selectedName).on('value', (snapshot) => {
+      var select = document.getElementById("nameSelect");
+      document.getElementById('nameSelect').innerHTML = "";
+      allItems = snapshot.val();
+
+      var option = document.createElement("option");
+      option.text = '--Select--';
+      select.add(option);
+      Object.keys(allItems).forEach((name) => {
+        var option = document.createElement("option");
+        option.text = allItems[name].name;
+        option.value = name;
+        select.add(option);
+      });
+    });
+  });
 
 //populate boxes  based on what name was  selected
-$('#nameSelect').on('change', function(e){
-  var yourSelect = document.getElementById("nameSelect");
-  var selectedName = yourSelect.options[yourSelect.selectedIndex].value;
-  var locationSelect = document.getElementById("locationSelect");
-  var location = locationSelect.options[locationSelect.selectedIndex].value;
-  var selectedUnit = 'unit';
-  database.ref('items/' + location+'/'+selectedName+ '/' + selectedUnit).on('value', (snapshot) => {
-    var vals = snapshot.val();
-    $('#barCodeBox').val(selectedName);
-    $('#numBox').val(vals.number);
-    $('#itemImg').attr("src", vals.image);
-    $('#itemImg').show();
-    $('#image-placeholder-text').hide();
-    console.log(selectedName);
+  $('#nameSelect').on('change', function(e){
+    var yourSelect = document.getElementById("nameSelect");
+    var selectedName = yourSelect.options[yourSelect.selectedIndex].value;
+    var locationSelect = document.getElementById("locationSelect");
+    var location = locationSelect.options[locationSelect.selectedIndex].value;
+    var selectedUnit = 'unit';
+    database.ref('items/' + location+'/'+selectedName+ '/' + selectedUnit).on('value', (snapshot) => {
+      var vals = snapshot.val();
+      $('#barCodeBox').val(selectedName);
+      $('#numBox').val(vals.number);
+      $('#itemImg').attr("src", vals.image);
+      $('#itemImg').show();
+      $('#image-placeholder-text').hide();
+      console.log(selectedName);
+    });
   });
-});
 
 //grab all the information from the selects and  text boxes, then update the
 //information in the firebase database.
-$('#checkoutButton').click(() => {
-  const yourSelect = document.getElementById("nameSelect");
-  const name = yourSelect.options[yourSelect.selectedIndex].text;
+  $('#checkoutButton').click(() => {
+    const yourSelect = document.getElementById("nameSelect");
+    const name = yourSelect.options[yourSelect.selectedIndex].text;
 
-  const units = 'unit';
+    const units = 'unit';
 
-  var locationSelect = document.getElementById("locationSelect");
-  var location = locationSelect.options[locationSelect.selectedIndex].value;
+    var locationSelect = document.getElementById("locationSelect");
+    var location = locationSelect.options[locationSelect.selectedIndex].value;
 
-  const barCode = $('#barCodeBox').val();
-  if( name == "" || units == "" || $('#checkNumBox').val()=='') {
-    console.log('no input');
-    return;
-  }
-  const dbLink = location+'/'+barCode + '/'+units;
-  const key = 'items/' + dbLink;
-  console.log(key);
-  // 'once' reads the value once from the database
-  database.ref(key).once('value', (snapshot) => {
-    const data = snapshot.val();
-    console.log('You received some data!', data);
-    if (!data) {
-      // clear the display
-      console.log('Item does not Exist');
+    const barCode = $('#barCodeBox').val();
+    if( name == "" || units == "" || $('#checkNumBox').val()=='') {
+      console.log('no input');
       return;
     }
-    if (data.number && data.unit) {
-      const checkoutAmount = parseInt($('#checkNumBox').val());
-      if (checkoutAmount > 0) {
-        if (data.number >= checkoutAmount) {
-          total = parseInt(data.number) - checkoutAmount;
-          database.ref('items/' +location+'/'+barCode + '/'+units).update({
-            number: total
-          });
-          document.location.href = '/viewInventory';
-        } else {
-          // clear the display
-          console.log("error");
-          alert("ERROR: Checkout amount is greater than available.");
-        }
-      } else {
-        alert("ERROR: Enter a value greater than 0.");
+    const dbLink = location+'/'+barCode + '/'+units;
+    const key = 'items/' + dbLink;
+    console.log(key);
+    // 'once' reads the value once from the database
+    database.ref(key).once('value', (snapshot) => {
+      const data = snapshot.val();
+      console.log('You received some data!', data);
+      if (!data) {
+        // clear the display
+        console.log('Item does not Exist');
+        return;
       }
-    }
+      if (data.unit) {
+        if (data.number > 0) {
+          const checkoutAmount = parseInt($('#checkNumBox').val());
+          if (checkoutAmount > 0) {
+            if (data.number >= checkoutAmount) {
+              total = parseInt(data.number) - checkoutAmount;
+              database.ref('items/' +location+'/'+barCode + '/'+units).update({
+                number: total
+              });
+              document.location.href = '/viewInventory';
+            } else {
+              // clear the display
+              console.log("error");
+              alert("ERROR: Checkout amount is greater than available.");
+            }
+          } else {
+            alert("ERROR: Enter a value greater than 0.");
+          } 
+        } else {
+          alert("ERROR: Out of stock!");
+        }
+      }
     });
   });
 });
