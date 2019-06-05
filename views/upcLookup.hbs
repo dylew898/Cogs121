@@ -87,7 +87,7 @@ $(document).ready(() => {
           switch (data.statusCode) {
             case 200:
               $.each(data.body.items, (index, element) => {
-                $('#nameBox').val(element.title);
+                $('#nameBox').val(element.title.slice(0, 32));
                 $('#barCodeBox').val(element.upc);
               });
               break;
@@ -117,35 +117,6 @@ $(document).ready(() => {
     selectedFile = event.target.files[0];
   });
 
-  database.ref('items/' ).on('value', (snapshot) => {
-    allItems = snapshot.val();
-    Object.keys(allItems).forEach((id) => {
-      console.log(id);
-      const typeDict = allItems[id]
-        Object.keys(typeDict).forEach((type) => {
-          if(type != "name"){
-            console.log("ID: "+ id+" Name: "+ typeDict[type].name + " Type: " + type + " Number: "+ typeDict[type].number)
-          }
-        });
-      });
-    });
-
-<<<<<<< HEAD
-=======
-  $('#resetButton').click(() => {
-    console.log('Resetting the database');
-    /* remember the fake JavaScript object database from PetsApp v1?
-    const fakeDatabase = {
-      'Philip': {job: 'professor', pet: 'cat.jpg'},
-      'John': {job: 'student',   pet: 'dog.jpg'},
-      'Carol': {job: 'engineer',  pet: 'bear.jpg'}
-    };
-    */
-    database.ref('items/').remove();
-    alert("Firebase DB reset!");
-  });
-//reads the  values in the inputs and adds the item to the database
->>>>>>> 0664a33e9a51fd932c5dd9dc9c081e064926b129
  $('#insertButton').click(() => {
     const itemName = $('#nameBox').val();
     const itemNumber = $('#numBox').val()
@@ -194,11 +165,7 @@ $(document).ready(() => {
     });
   });
 
-<<<<<<< HEAD
-//used to upload the image that the user inputs to the database
-=======
   //This function allows the user to upload an image for the item they are adding to their inventory.
->>>>>>> 47e29afafd3260f5e5c8cd649f47b4f3636dcab6
   function uploadImages(file, reference) {
     if (reference) {
       if (file) {

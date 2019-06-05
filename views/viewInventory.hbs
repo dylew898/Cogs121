@@ -7,14 +7,12 @@ what the user sees based  on what location they select. -->
 
 <h1>{{title}}</h1>
 <hr/>
-<div class="form-group row">
-  <label for="locationSelect" class="col-sm-2">Select Location</label>
-  <div class="col-4">
-    <select class="form-control" id="locationSelect">
-    <option value="All Locations">All Locations</option>
+<form class="form-inline my-4 ml-3">
+  <h6 class="my-1 mr-2" for="locationSelect" class="col-sm-2">Select Location</h6>
+    <select class="form-control" id="locationSelect" style="min-width: 300px;">
+        <option value="All Locations">All Locations</option>
     </select>
-  </div>
-</div>
+</form>
 <div id="status"></div>
 
 <!-- HTML skeleton for card
@@ -54,7 +52,8 @@ $(document).ready(() => {
     if (allLocations) {
         Object.keys(allLocations).forEach((location) => {
             const locationInventory = allLocations[location];
-            $('#status').append('<h3 class="location">'+location+'</h3>');
+            $('#status').append('<h3 class="location ml-3">'+location+'</h3>');
+            $('#status').append('<hr/>');
             Object.keys(locationInventory).forEach((itemBarcode) => {
                 const item = locationInventory[itemBarcode];
                 Object.keys(item).forEach((itemUnit) => {
@@ -105,7 +104,8 @@ $(document).ready(() => {
         Object.keys(allLocations).forEach((location) => {
             if(location == selectedName || selectedName == 'All Locations'){
             const locationInventory = allLocations[location];
-            $('#status').append('<h3 class="location">'+location+'</h3>');
+            $('#status').append('<h3 class="location ml-3">'+location+'</h3>');
+            $('#status').append('<hr/>');
             Object.keys(locationInventory).forEach((itemBarcode) => {
                 const item = locationInventory[itemBarcode];
                 Object.keys(item).forEach((itemUnit) => {

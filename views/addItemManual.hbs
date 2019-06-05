@@ -108,8 +108,8 @@ $(document).ready(() => {
       console.log('You received some data!', data);
 
       const directory = 'items/' + location +'/'+ barCode + '/'+ itemUnit + '/'
-      const imgURL = uploadImages(selectedFile, directory);
-      console.log(imgURL);
+      //const imgURL = uploadImages(selectedFile, directory);
+      //console.log(imgURL);
       //if no data exists in db add new entry
       if (!data) {
         database.ref('items/' + location + '/' + barCode + '/'+itemUnit).set({
@@ -122,6 +122,7 @@ $(document).ready(() => {
         database.ref('items/' + location + '/' + barCode ).update({
           name: itemName
         });
+        uploadImages(selectedFile, directory);
       }
       else if (data.number) {
         total = parseInt(data.number) + parseInt(itemNumber);
@@ -133,7 +134,6 @@ $(document).ready(() => {
           barcode: barCode
         });
       }
-      uploadImages(selectedFile, directory);
     });
   });
 
