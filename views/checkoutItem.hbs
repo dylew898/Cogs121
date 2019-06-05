@@ -82,8 +82,7 @@ database.ref('items/').on('value', (snapshot) => {
   });
 });
 
-//auto populating
-
+//auto populating based on what location was selected for the following box
 $('#locationSelect').on('change', function(e){
   var yourSelect = document.getElementById("locationSelect");
   var selectedName = yourSelect.options[yourSelect.selectedIndex].value;
@@ -105,7 +104,7 @@ $('#locationSelect').on('change', function(e){
   });
 });
 
-
+//populate boxes  based on what name was  selected
 $('#nameSelect').on('change', function(e){
   var yourSelect = document.getElementById("nameSelect");
   var selectedName = yourSelect.options[yourSelect.selectedIndex].value;
@@ -121,6 +120,8 @@ $('#nameSelect').on('change', function(e){
   });
 });
 
+//grab all the information from the selects and  text boxes, then update the
+//information in the firebase database.
 $('#checkoutButton').click(() => {
   const yourSelect = document.getElementById("nameSelect");
   const name = yourSelect.options[yourSelect.selectedIndex].text;

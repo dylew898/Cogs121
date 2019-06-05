@@ -52,7 +52,8 @@ what the user sees based  on what location they select. -->
 
 <script>
 $(document).ready(() => {
-
+    //once the page is ready the select for the location is populated by
+    //querying the database for locations
     var x = document.getElementById("locationSelect");
 
     const database = firebase.database();
@@ -69,8 +70,7 @@ $(document).ready(() => {
     });
 
 
-    // use .on('value' to get notified in real-time whenever anyone
-    // on the internet updates your database. cool!
+    //we query the database and then use handlbars objects to populate the page
     database.ref('items/').on('value', (snapshot) => {
     const allLocations = snapshot.val();
     $('#status').html(''); // clear the HTML
@@ -113,6 +113,8 @@ $(document).ready(() => {
         }
     });
 
+    //upon changing the selected location, query the database and clear html,
+    //then create handlbars objects for items at that  location
     $('#locationSelect').on('change', function(e){
     const database = firebase.database();
 

@@ -89,6 +89,8 @@ $(document).ready(() => {
   $('#status').html(''); // clear the HTML
   $('#itemImg').hide();
 
+  //listener for the upc lookup button which makes an ajax call to the api to
+  //get information about the upc  code
   $('#upcLookupButton').click(() => {
     const upcCode = $('#barCodeBox').val();
     if (upcCode == "") {
@@ -159,7 +161,7 @@ $(document).ready(() => {
     database.ref('items/').remove();
     alert("Firebase DB reset!");
   });
-
+//reads the  values in the inputs and adds the item to the database
  $('#insertButton').click(() => {
     const itemName = $('#nameBox').val();
     const itemNumber = $('#numBox').val()
@@ -208,6 +210,7 @@ $(document).ready(() => {
     });
   });
 
+//used to upload the image that the user inputs to the database
   function uploadImages(file, reference) {
     if (reference) {
       if (file) {

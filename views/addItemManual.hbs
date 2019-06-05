@@ -52,6 +52,8 @@ image. The submite button updates the firebase database. -->
 
 <script>
 var selectedFile;
+
+//setup the page
 $(document).ready(() => {
   const database = firebase.database();
   const storage = firebase.storage();
@@ -102,6 +104,8 @@ $(document).ready(() => {
     alert("Firebase DB reset!");
   });
 
+  //reads all of the values from the text boxes and adds the new item to the
+  //firebase database
   $('#insertButton').click(() => {
     const itemName = $('#nameBox').val();
     const itemNumber = $('#numBox').val()
