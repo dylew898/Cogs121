@@ -1,3 +1,6 @@
+<!-- This page allows the user to manually input items into the database. There are
+multiple input boxes that they can fill out, such as bar code, quantity and an
+image. The submite button updates the firebase database. -->
 <h1>{{title}}</h1>
 <hr/>
 
@@ -47,6 +50,8 @@
 
 <script>
 var selectedFile;
+
+//setup the page
 $(document).ready(() => {
   const database = firebase.database();
   const storage = firebase.storage();

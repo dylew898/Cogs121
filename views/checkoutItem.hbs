@@ -1,3 +1,8 @@
+<!-- This page is used to checkout existing items that are already in the database.
+It queries the firebase database for pre-existing data and then populates the
+select boxes. There are also listeners on ever select box that detects when a
+user chooses something so that the next box can also be populated. Finally, the
+submit button updates the item information in the firebase database.  -->
 <h1>{{title}}</h1>
 <hr/>
 
@@ -77,8 +82,7 @@ database.ref('items/').on('value', (snapshot) => {
   });
 });
 
-//auto populating
-
+//auto populating based on what location was selected for the following box
 $('#locationSelect').on('change', function(e){
   var yourSelect = document.getElementById("locationSelect");
   var selectedName = yourSelect.options[yourSelect.selectedIndex].value;
@@ -100,7 +104,7 @@ $('#locationSelect').on('change', function(e){
   });
 });
 
-
+//populate boxes  based on what name was  selected
 $('#nameSelect').on('change', function(e){
   var yourSelect = document.getElementById("nameSelect");
   var selectedName = yourSelect.options[yourSelect.selectedIndex].value;
@@ -116,6 +120,8 @@ $('#nameSelect').on('change', function(e){
   });
 });
 
+//grab all the information from the selects and  text boxes, then update the
+//information in the firebase database.
 $('#checkoutButton').click(() => {
   const yourSelect = document.getElementById("nameSelect");
   const name = yourSelect.options[yourSelect.selectedIndex].text;

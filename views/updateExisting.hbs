@@ -1,3 +1,9 @@
+<!-- This page is used to update existing items that are already in the database.
+It queries the firebase database for pre-existing data and then populates the
+select boxes. There are also listeners on ever select box that detects when a
+user chooses something so that the next box can also be populated. Finally, the
+submit button updates the item information in the firebase database.  -->
+
 <h1>{{title}}</h1>
 <hr/>
 
@@ -60,24 +66,8 @@
 
 <script>
 $(document).ready(() => {
+//populate the first select box upon the page being loaded in
 const database = firebase.database();
-
-/*database.ref('items/' ).on('value', (snapshot) => {
-    allItems = snapshot.val();
-    Object.keys(allItems).forEach((id) => {
-      console.log(id);
-      const typeDict = allItems[id]
-      $('#status').html('');
-      $('#status').append('Data from Firebase:')
-      Object.keys(typeDict).forEach((type) => {
-        if(type != "name"){
-          console.log("Barcode ID: "+ id+" Name: "+ typeDict[type].name + " Type: " + type + " Number: "+ typeDict[type].number);
-          $('#status').append($('<li>').append("Barcode: "+ id+" Name: "+ typeDict[type].name + " Type: " + type + " Number: "+ typeDict[type].number));
-        }
-      });
-    });
-  });
-*/
 
 var x = document.getElementById("locationSelect");
 
@@ -93,8 +83,7 @@ database.ref('items/').on('value', (snapshot) => {
   });
 });
 
-//auto populating
-
+//auto populating based on what location was selected for the following box
 $('#locationSelect').on('change', function(e){
   var yourSelect = document.getElementById("locationSelect");
   var selectedName = yourSelect.options[yourSelect.selectedIndex].value;
@@ -116,28 +105,13 @@ $('#locationSelect').on('change', function(e){
   });
 });
 
-
+//populate boxes  based on what name was  selected
 $('#nameSelect').on('change', function(e){
   var yourSelect = document.getElementById("nameSelect");
   var selectedName = yourSelect.options[yourSelect.selectedIndex].value;
   var locationSelect = document.getElementById("locationSelect");
   var location = locationSelect.options[locationSelect.selectedIndex].value;
-  // database.ref('items/' + location+'/'+selectedName).on('value', (snapshot) => {
-  //   var select = document.getElementById("unitSelect");
-  //   document.getElementById('unitSelect').innerHTML = "";
-  //   allItems = snapshot.val();
-  //
-  //   var option = document.createElement("option");
-  //   option.text = '--Select--';
-  //   select.add(option);
-  //   Object.keys(allItems).forEach((name) => {
-  //     if (name != 'name') {
-  //       var option = document.createElement("option");
-  //       option.text = name;
-  //       select.add(option);
-  //     }
-  //   });
-  // });
+
   selectedUnit = 'unit'
   database.ref('items/' + location+'/'+selectedName+ '/' + selectedUnit).on('value', (snapshot) => {
     var vals = snapshot.val();
@@ -148,22 +122,8 @@ $('#nameSelect').on('change', function(e){
   });
 });
 
-// $('#unitSelect').on('change', function(e){
-//   var yourSelect = document.getElementById("nameSelect");
-//   var selectedName = yourSelect.options[yourSelect.selectedIndex].value;
-//   var locationSelect = document.getElementById("locationSelect");
-//   var location = locationSelect.options[locationSelect.selectedIndex].value;
-//   var unitSelect = document.getElementById("unitSelect");
-//   var selectedUnit = unitSelect.options[unitSelect.selectedIndex].value;
-//   database.ref('items/' + location+'/'+selectedName+ '/' + selectedUnit).on('value', (snapshot) => {
-//     var vals = snapshot.val();
-//     $('#barCodeBox').val(selectedName);
-//     $('#numBox').val(vals.number);
-//     console.log(selectedName)
-//   });
-// });
-
-
+//grab all the information from the selects and  text boxes, then update the
+//information in the firebase database. 
 $('#checkoutButton').click(() => {
   const yourSelect = document.getElementById("nameSelect");
   const name = yourSelect.options[yourSelect.selectedIndex].text;

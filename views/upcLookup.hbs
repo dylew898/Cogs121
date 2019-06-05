@@ -1,3 +1,11 @@
+<!-- 
+This is the UPC lookup page. Users have the ability to add new items by typing in the item's UPC barcode
+into the barcode text field. Searching the barcode will autopopulate the item's name pulling it from the 
+UPC item database. The user would then enter in a location for their item to be sorted in for organizational
+purposes, as well as enter in the quantity of that item as well as have the ability to upload an image for 
+that item.
+-->
+
 <h1>Add Item - UPC Lookup</h1>
 <hr/>
 
@@ -62,6 +70,8 @@ $(document).ready(() => {
   $('#status').html(''); // clear the HTML
   $('#itemImg').hide();
 
+  //listener for the upc lookup button which makes an ajax call to the api to
+  //get information about the upc  code
   $('#upcLookupButton').click(() => {
     const upcCode = $('#barCodeBox').val();
     if (upcCode == "") {
@@ -120,6 +130,22 @@ $(document).ready(() => {
       });
     });
 
+<<<<<<< HEAD
+=======
+  $('#resetButton').click(() => {
+    console.log('Resetting the database');
+    /* remember the fake JavaScript object database from PetsApp v1?
+    const fakeDatabase = {
+      'Philip': {job: 'professor', pet: 'cat.jpg'},
+      'John': {job: 'student',   pet: 'dog.jpg'},
+      'Carol': {job: 'engineer',  pet: 'bear.jpg'}
+    };
+    */
+    database.ref('items/').remove();
+    alert("Firebase DB reset!");
+  });
+//reads the  values in the inputs and adds the item to the database
+>>>>>>> 0664a33e9a51fd932c5dd9dc9c081e064926b129
  $('#insertButton').click(() => {
     const itemName = $('#nameBox').val();
     const itemNumber = $('#numBox').val()
@@ -168,6 +194,11 @@ $(document).ready(() => {
     });
   });
 
+<<<<<<< HEAD
+//used to upload the image that the user inputs to the database
+=======
+  //This function allows the user to upload an image for the item they are adding to their inventory.
+>>>>>>> 47e29afafd3260f5e5c8cd649f47b4f3636dcab6
   function uploadImages(file, reference) {
     if (reference) {
       if (file) {
